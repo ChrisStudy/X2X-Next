@@ -20,7 +20,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
 export default function BlogList({ allPostsData }: Props) {
     return (
-        <div>
+        <div className="container max-w-screen-xl mx-auto p-10">
 
         <div className="flex flex-col items-center gap-6 text-left sm:items-start sm:text-left">
             <h1

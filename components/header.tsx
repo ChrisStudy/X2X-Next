@@ -24,13 +24,15 @@ export default function Header({ title }: HeaderProps) {
     return (
         <>
             <Head>
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <title>{title ?? 'X2X Creative - Best'}</title>
                 <meta name="description" content="My awesome site" />
+                <meta name="robots" content="noindex, nofollow" />
             </Head>
 
-            <header className={layoutStyles.header}>
-                <nav className="bg-neutral-primary fixed container z-20 top-0 start-0  border-default">
-                    <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <header className={`${layoutStyles.header} main-header h-* w-full mx-auto p-10`}>
+                <nav className="bg-neutral-primary w-full z-20 top-0 start-0  border-default">
+                    <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
 
                         {/* Logo */}
                         <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">

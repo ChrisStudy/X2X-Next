@@ -10,7 +10,7 @@ export async function getWeather() {
     }
 
     const data = await res.json();
-    console.log("WEATHER API RESULT:", data);
+    // console.log("WEATHER API RESULT:", data);
 
     const current = {
         temperature: data.current_weather.temperature,

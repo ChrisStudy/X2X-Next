@@ -4,9 +4,10 @@
 @source "../.flowbite-react/class-list.json";
 
 :root {
-    --background: #0a0a0a;
+    /*--background: #0a0a0a;*/
     --foreground: #ededed;
     --main-font-color: #ffffff;
+    --main-color: #a2a2a2;
 }
 
 @theme inline {
@@ -74,17 +75,16 @@ img {
     display: inline-block;
 }
 
-.hover-underline::after,
-.hover-underline::before {
+.hover-underline::after {
     content: '';
     position: absolute;
     width: 100%;
     height: 2px;
-    background: linear-gradient(to right, #F105F5, #00FFFF);
+    background: linear-gradient(to left, #F105F5, #00FFFF);
     bottom: -5px;
     left: 0;
     transform: scaleX(0);
-    transform-origin: right;
+    transform-origin: left;
     transition: transform 0.4s ease-out;
 }
 
@@ -126,5 +126,190 @@ p {
 }
 main.dark\:bg-black,
 main .dark\:bg-black{
-    background-color: var(--background);
+    /*background-color: var(--background);*/
+    background: transparent;
+}
+header.main-header.h-\* {
+    height: 171px;
+}
+/* The typing effect */
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: orange; }
+}
+h2.max-w-s.text-3xl.font-semibold.leading-10.tracking-tight.text-black.dark\:text-zinc-50 {
+    overflow: hidden;
+    border-right: .15em solid orange;
+    white-space: nowrap;
+    /* margin: 0 auto; */
+    letter-spacing: .15em;
+    animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+}
+.gradient-text {
+    background: linear-gradient(120deg, #ff00cc 0%, #00ffff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.button.gradient {
+    display: inline-block;
+    color: white;
+    border: 1px solid;
+    border-color:color-mix(in srgb, #fff 14.499999999999998%, transparent);
+    border-radius: 9999px;
+    padding: 0.5em 2.75em;
+    background: linear-gradient(120deg, #ff00cc 0%, #00FFFF 100%);
+    background-size: 0% 100%;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    transition: background-size 0.5s ease-in-out;
+}
+
+.button.gradient:hover {
+    background-size: 100% 100%;
+    border:none;
+    cursor: pointer;
+}
+
+
+@layer base {
+    :root {
+        --background: 0 0% 8%;
+        --foreground: 0 0% 95%;
+        --card: 0 0% 12%;
+        --card-foreground: 0 0% 95%;
+        --muted: 0 0% 20%;
+        --muted-foreground: 0 0% 60%;
+        --coral: 11 65% 63%;
+        --coral-glow: 11 70% 70%;
+        --border: 0 0% 20%;
+    }
+}
+
+/* 同时删除文件顶部的这行，因为它会覆盖HSL值 */
+/* :root { --background: #0a0a0a; ... } */
+
+
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
+.animate-scale-in { animation: scale-in 0.3s ease-out forwards; }
+
+.about *,
+.resumeme *{
+    color:var(--main-color);
+}
+.primary-font-color {
+    color:var(--main-font-color)
+}
+.gradient-bg {
+    background: linear-gradient(120deg, #ff00cc 0%, #00FFFF 100%);
+}
+/* RIGHT BORDER (already exists) */
+.right-border-dashed {
+    border-right-width: 1px;
+    border-right-style: dashed;
+    border-right-color: rgba(255, 255, 255, 0.1);
+}
+
+/* LEFT BORDER */
+.left-border-dashed {
+    border-left-width: 1px;
+    border-left-style: dashed;
+    border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+/* TOP BORDER */
+.top-border-dashed {
+    border-top-width: 1px;
+    border-top-style: dashed;
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* BOTTOM BORDER */
+.bottom-border-dashed {
+    border-bottom-width: 1px;
+    border-bottom-style: dashed;
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: rgba(255,255,255,0.1);
+}
+.timeline-row {
+    display: grid;
+    grid-template-columns: 40px 160px 1fr;
+    align-items: center;
+    align-content: center;
+    position: relative;
+}
+.timeline-row::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(120deg, #ff00cc 0%, #00FFFF 100%);
+    border-radius: 50%;
+}
+.timeline-time {
+    grid-column: 2;
+    background: rgba(255,255,255,0.06);
+    padding: 6px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    width: fit-content;
+}
+.timeline-content h4 {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.timeline-content p {
+    color: rgba(255,255,255,0.6);
+    font-size: 14px;
+}
+
+/* 滚动条宽度 */
+::-webkit-scrollbar {
+    width: 10px; /* 可以根据需要调整宽度 */
+}
+
+/* 滚动条轨道 */
+/*::-webkit-scrollbar-track {*/
+/*    background-color: #f5f5f5; !* 默认淡灰色 *!*/
+/*}*/
+
+/* 滑块，用你的渐变 + 圆滑圆角 */
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(120deg, #ff00cc 0%, #00FFFF 100%);
+    border-radius: 12px; /* 圆滑一点 */
+}
+
+/* 滑块悬停效果，可微调 */
+::-webkit-scrollbar-thumb:hover {
+    opacity: 0.9; /* 微微加深 */
+}
+.text-white {
+    color: white;
 }
