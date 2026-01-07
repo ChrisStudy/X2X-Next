@@ -58,19 +58,19 @@ const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                     <div className="mt-8 space-y-4 w-full text-sm">
                         <div className="flex items-center gap-3 bottom-border-dashed pb-4">
                             <Mail className="w-4 h-4" />
-                            <span>david@example.com</span>
+                            <span>x2xcreative@gmail.com</span>
                         </div>
                         <div className="flex items-center gap-3 bottom-border-dashed pb-4">
                             <Phone className="w-4 h-4" />
-                            <span>+1 234 567 890</span>
+                            <span>+61 666 666 666</span>
                         </div>
                         <div className="flex items-center gap-3 bottom-border-dashed pb-4">
                             <MapPin className="w-4 h-4" />
-                            <span>New York, USA</span>
+                            <span>Perth, WA, Australia</span>
                         </div>
                         <div className="flex items-center gap-3 bottom-border-dashed pb-4">
                             <Globe className="w-4 h-4" />
-                            <span>www.davidparker.com</span>
+                            <span>www.x2xcreative.com.au</span>
                         </div>
                     </div>
                 </div>

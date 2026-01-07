@@ -16,9 +16,25 @@ interface HeaderProps {
 export default function Header({ title }: HeaderProps) {
     const pathname = usePathname();
 
-    // ✅ IMPORTANT: initialize Flowbite on client
+    // Flowbite init
     useEffect(() => {
         initFlowbite();
+    }, []);
+
+    // 👇 Sticky on scroll
+    useEffect(() => {
+        const header = document.querySelector('.main-header');
+
+        const onScroll = () => {
+            if (window.scrollY > 80) {
+                header?.classList.add('is-sticky');
+            } else {
+                header?.classList.remove('is-sticky');
+            }
+        };
+
+        window.addEventListener('scroll', onScroll);
+        return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
     return (
@@ -30,8 +46,10 @@ export default function Header({ title }: HeaderProps) {
                 <meta name="robots" content="noindex, nofollow" />
             </Head>
 
-            <header className={`${layoutStyles.header} main-header h-* w-full mx-auto p-10`}>
-                <nav className="bg-neutral-primary w-full z-20 top-0 start-0  border-default">
+            <header
+                className={`${layoutStyles.header} main-header w-full mx-auto px-10`}
+            >
+                <nav className="w-full z-20">
                     <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
 
                         {/* Logo */}
@@ -46,7 +64,7 @@ export default function Header({ title }: HeaderProps) {
                             />
                         </Link>
 
-                        {/* Mobile toggle button (Flowbite controlled) */}
+                        {/* Mobile toggle */}
                         <button
                             data-collapse-toggle="navbar-default"
                             type="button"
@@ -71,12 +89,9 @@ export default function Header({ title }: HeaderProps) {
                             </svg>
                         </button>
 
-                        {/* Collapsible menu (Flowbite controlled) */}
-                        <div
-                            className="hidden w-full md:block md:w-auto"
-                            id="navbar-default"
-                        >
-                            <ul className="no-bullets font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-neutral-primary">
+                        {/* Menu */}
+                        <div className="hidden w-full md:block md:w-auto" id="navbar-default">
+                            <ul className="no-bullets font-medium flex flex-col p-4 md:p-0 mt-4 border border-default rounded-base bg-neutral-secondary-soft md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-transparent">
                                 {[
                                     { href: '/', label: 'Home' },
                                     { href: '/about', label: 'About Me' },
@@ -86,7 +101,7 @@ export default function Header({ title }: HeaderProps) {
                                     <li key={link.href}>
                                         <Link
                                             href={link.href}
-                                            className={`block py-2 px-3 rounded md:bg-transparent md:p-0 ${
+                                            className={`block py-2 px-3 md:p-0 ${
                                                 pathname === link.href
                                                     ? 'text-white font-semibold'
                                                     : 'text-gray-300 hover:text-white'
@@ -105,4 +120,3 @@ export default function Header({ title }: HeaderProps) {
         </>
     );
 }
-
