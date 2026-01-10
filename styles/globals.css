@@ -187,7 +187,8 @@ h2.max-w-s.text-3xl.font-semibold.leading-10.tracking-tight.text-black.dark\:tex
     transition: background-size 0.5s ease-in-out;
 }
 
-.button.gradient:hover {
+.button.gradient:hover,
+.button.gradient.active {
     background-size: 100% 100%;
     border:none;
     cursor: pointer;

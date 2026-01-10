@@ -1,63 +1,80 @@
+// lib/projects.ts
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { remark } from "remark";
 import html from "remark-html";
+import type { Project, ProjectCategory } from "./project-types";
 
-export type ProjectData = {
-    id: string;
-    title: string;
-    date: string;
-    contentHtml: string;
-};
+// ✅ 导出类型
+export type { Project, ProjectCategory };
 
+// 定义允许的分类
+const validCategories: ProjectCategory[] = [
+    "all",
+    "frontend",
+    "fullstack",
+    "mobile",
+    "design",
+];
+
+// Markdown 项目存放目录
 const projectsDirectory = path.join(process.cwd(), "projects");
 
-export function getSortedProjectsData(): ProjectData[] {
+/**
+ * 读取所有 Markdown 项目文件并返回 Project[]
+ */
+export async function getAllProjects(): Promise<Project[]> {
     const fileNames = fs.readdirSync(projectsDirectory);
 
-    const allProjectsData = fileNames.map((fileName) => {
-        const id = fileName.replace(/\.md$/, "");
-        const fullPath = path.join(projectsDirectory, fileName);
-        const fileContents = fs.readFileSync(fullPath, "utf8");
+    const projects: Project[] = await Promise.all(
+        fileNames.map(async (fileName) => {
+            const id = fileName.replace(/\.md$/, "");
+            const fullPath = path.join(projectsDirectory, fileName);
+            const fileContents = fs.readFileSync(fullPath, "utf8");
 
-        const { data } = matter(fileContents);
+            const { data, content } = matter(fileContents);
 
-        return {
-            id,
-            ...(data as { date: string; title: string }),
-            contentHtml: "",
-        };
-    });
+            // 转换 Markdown 内容为 HTML
+            const processedContent = await remark().use(html).process(content);
 
-    return allProjectsData.sort((a, b) => (a.date < b.date ? 1 : -1));
+            // 校验 category 是否有效，否则默认 "all"
+            let category: ProjectCategory = "all";
+            if (
+                typeof data.category === "string" &&
+                validCategories.includes(data.category as ProjectCategory)
+            ) {
+                category = data.category as ProjectCategory;
+            }
+
+            return {
+                id,
+                title: data.title ?? "Untitled Project",
+                subtitle: data.subtitle ?? null, // undefined -> null
+                description: data.description ?? "",
+                longDescription: processedContent.toString(),
+                category,
+                technologies: Array.isArray(data.technologies) ? data.technologies : [],
+                image: data.image ?? "",
+                year: data.year ?? "",
+                features: Array.isArray(data.features) ? data.features : [],
+                liveUrl: data.liveUrl ?? null,   // undefined -> null
+                githubUrl: data.githubUrl ?? null, // undefined -> null
+            } as Project;
+        })
+    );
+
+    return projects;
 }
 
-export function getAllProjectIds() {
-    const fileNames = fs.readdirSync(projectsDirectory);
+/**
+ * 项目分类，用于前端过滤按钮
+ */
+export const categories: { value: ProjectCategory; label: string }[] = [
+    { value: "all", label: "ALL" },
+    { value: "frontend", label: "FRONTEND" },
+    { value: "fullstack", label: "FULL STACK" },
+    { value: "mobile", label: "MOBILE" },
+    { value: "design", label: "DESIGN" },
+];
 
-    return fileNames.map((fileName) => ({
-        params: {
-            id: fileName.replace(/\.md$/, ""),
-        },
-    }));
-}
-
-export async function getProjectData(id: string): Promise<ProjectData> {
-    const fullPath = path.join(projectsDirectory, `${id}.md`);
-    const fileContents = fs.readFileSync(fullPath, "utf8");
-
-    const matterResult = matter(fileContents);
-
-    const processedContent = await remark()
-        .use(html)
-        .process(matterResult.content);
-
-    const contentHtml = processedContent.toString();
-
-    return {
-        id,
-        ...(matterResult.data as { title: string; date: string }),
-        contentHtml,
-    };
-}
