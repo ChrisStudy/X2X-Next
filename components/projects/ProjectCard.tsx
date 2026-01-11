@@ -11,7 +11,7 @@ interface ProjectCardProps {
 const ProjectCard = ({ project, onClick, index }: ProjectCardProps) => {
     return (
         <div
-            className="project-card group cursor-pointer opacity-0 animate-fade-in-up"
+            className="project-card group cursor-pointer"
             style={{ animationDelay: `${index * 150}ms` }}
             onClick={onClick}
         >
@@ -20,7 +20,7 @@ const ProjectCard = ({ project, onClick, index }: ProjectCardProps) => {
                 <img
                     src={project.image}
                     alt={project.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="h-full w-full object-cover transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 

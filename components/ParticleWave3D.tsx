@@ -10,9 +10,9 @@ export default function VantaWavesBackground() {
                 options={{
                     backgroundAlpha: 0,
                     color: 0x0,
-                    shininess: 30,
-                    waveHeight: 15,
-                    waveSpeed: 1,
+                    shininess: 10,
+                    waveHeight: 8,
+                    waveSpeed: 0.3,
                     zoom: 1,
                     mouseControls: false,
                     touchControls: false,
@@ -22,4 +22,3 @@ export default function VantaWavesBackground() {
         </div>
     );
 }
-

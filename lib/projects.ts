@@ -71,10 +71,10 @@ export async function getAllProjects(): Promise<Project[]> {
  * 项目分类，用于前端过滤按钮
  */
 export const categories: { value: ProjectCategory; label: string }[] = [
-    { value: "all", label: "ALL" },
-    { value: "frontend", label: "FRONTEND" },
-    { value: "fullstack", label: "FULL STACK" },
-    { value: "mobile", label: "MOBILE" },
-    { value: "design", label: "DESIGN" },
+    { value: "all", label: "All" },
+    { value: "frontend", label: "Fontend" },
+    { value: "fullstack", label: "Fullstack" },
+    { value: "mobile", label: "Mobile" },
+    { value: "design", label: "Design" },
 ];
 

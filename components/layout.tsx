@@ -23,7 +23,7 @@ export default function Layout({ children, title , home }: LayoutProps) {
     const isHome = router.pathname === "/";
     return (
         <div className="dark grid relative min-h-svh">
-            <ParticleWave3D />
+            {/*<ParticleWave3D />*/}
             <Header title={title} />
             <main className="flex-row w-full mx-auto p-4 container">
                 {children}

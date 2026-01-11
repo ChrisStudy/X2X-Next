@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@react-spring/web": "^10.0.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "flowbite": "^4.0.1",
     "flowbite-react": "^0.12.14",
@@ -17,11 +19,14 @@
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.562.0",
     "next": "^16.1.0",
+    "ogl": "^1.0.11",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
-    "three": "^0.182.0",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss-animate": "^1.0.7",
+    "three": "^0.167.1",
     "vanta-react": "^0.4.3"
   },
   "devDependencies": {
