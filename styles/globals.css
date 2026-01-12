@@ -416,9 +416,11 @@ h2.max-w-s.text-3xl.font-semibold.leading-10.tracking-tight.text-black.dark\:tex
 
 /* Glass effect */
 .glass {
-    @apply backdrop-blur-xl;
-    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    background-color: hsl(var(--card) / 0.8);
 }
+
 /* Gradient text */
 .gradient-text {
     background-clip: text;
