@@ -4,9 +4,9 @@ import Weather from "../components/Weather";
 import { getWeather } from "../lib/weather";
 import HomeHero from "../components/HomeHero";
 import AboutSection from "@/components/AboutSection";
-import { getAllProjects, Project, categories } from "@/lib/projects";
+import { getAllProjects, Project, buildCategories  } from "@/lib/projects";
 import ProjectsSection from "@/components/projects/ProjectsSection";
-
+type CategoryItem = { value: string; label: string };
 type WeatherType = {
     current: {
         temperature: number;
@@ -29,18 +29,18 @@ type WeatherType = {
 type Props = {
     weather: WeatherType;
     projects: Project[];
-    categories: typeof categories; // ✅ 新增 categories 类型
+    categories: CategoryItem[] ; // ✅ 新增 categories 类型
 };
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
     const weather = await getWeather();
     const projects = await getAllProjects();
-
+    const categories = buildCategories(projects);
     return {
         props: {
             weather,
             projects,
-            categories, // ✅ 传 categories
+            categories , // ✅ 传 categories
         },
         revalidate: 3600,
     };

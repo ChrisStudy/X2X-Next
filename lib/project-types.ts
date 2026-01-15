@@ -1,9 +1,11 @@
-export type ProjectCategory =
-    | "all"
-    | "frontend"
-    | "fullstack"
-    | "mobile"
-    | "design";
+// export type ProjectCategory =
+//     | "all"
+//     | "frontend"
+//     | "fullstack"
+//     | "mobile"
+//     | "design";
+
+export type ProjectCategory = string;
 
 export interface Project {
     id: string;

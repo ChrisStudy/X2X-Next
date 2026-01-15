@@ -31,7 +31,7 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
                 {/* Gradient accent line */}
                 <div className="absolute right-0 top-0 h-full w-1 bg-gradient-to-b from-accent via-primary to-accent" />
 
-                <div className="flex h-full flex-col overflow-hidden md:flex-row">
+                <div className="flex h-full flex-col max-h-[90vh] overflow-hidden md:flex-row">
                     {/* Left sidebar */}
                     <div className="flex w-full flex-shrink-0 flex-col items-center right-border-dashed bg-sidebar p-8 md:w-80 md:border-b-0 md:border-r">
                         {/* Project image */}
@@ -85,7 +85,7 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
                     </div>
 
                     {/* Right content */}
-                    <div className="custom-scrollbar flex-1 overflow-y-auto p-8">
+                    <div className="flex-1 overflow-y-auto p-8  no-scrollbar scroll-fade-right">
                         {/* About section */}
                         <section className="mb-8">
                             <h4 className="mb-4 text-2xl font-bold">

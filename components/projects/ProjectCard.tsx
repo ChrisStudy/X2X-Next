@@ -1,7 +1,7 @@
 import { ExternalLink, Github } from "lucide-react";
 // import { Project } from "@/lib/projects";
 import { Project } from "@/lib/project-types";
-import { getAllProjects, categories } from "@/lib/projects";
+import { getAllProjects, buildCategories } from "@/lib/projects";
 interface ProjectCardProps {
     project: Project;
     onClick: () => void;

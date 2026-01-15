@@ -10,13 +10,13 @@ import type { Project, ProjectCategory } from "./project-types";
 export type { Project, ProjectCategory };
 
 // 定义允许的分类
-const validCategories: ProjectCategory[] = [
-    "all",
-    "frontend",
-    "fullstack",
-    "mobile",
-    "design",
-];
+// const validCategories: ProjectCategory[] = [
+//     "all",
+//     "frontend",
+//     "fullstack",
+//     "mobile",
+//     "design",
+// ];
 
 // Markdown 项目存放目录
 const projectsDirectory = path.join(process.cwd(), "projects");
@@ -39,20 +39,18 @@ export async function getAllProjects(): Promise<Project[]> {
             const processedContent = await remark().use(html).process(content);
 
             // 校验 category 是否有效，否则默认 "all"
-            let category: ProjectCategory = "all";
-            if (
-                typeof data.category === "string" &&
-                validCategories.includes(data.category as ProjectCategory)
-            ) {
-                category = data.category as ProjectCategory;
-            }
+            // category 当 tag，默认 "all"
+            const category: ProjectCategory = (typeof data.category === "string" && data.category)
+                ? (data.category as ProjectCategory)
+                : "all";
+
 
             return {
                 id,
                 title: data.title ?? "Untitled Project",
                 subtitle: data.subtitle ?? null, // undefined -> null
                 description: data.description ?? "",
-                longDescription: processedContent.toString(),
+                longDescription: data.longDescription ?? null,
                 category,
                 technologies: Array.isArray(data.technologies) ? data.technologies : [],
                 image: data.image ?? "",
@@ -68,13 +66,31 @@ export async function getAllProjects(): Promise<Project[]> {
 }
 
 /**
- * 项目分类，用于前端过滤按钮
+ * label 格式化：把 tag 转成可读形式
  */
-export const categories: { value: ProjectCategory; label: string }[] = [
-    { value: "all", label: "All" },
-    { value: "frontend", label: "Fontend" },
-    { value: "fullstack", label: "Fullstack" },
-    { value: "mobile", label: "Mobile" },
-    { value: "design", label: "Design" },
-];
+function formatLabel(value: string) {
+    return value
+        .replace(/[-_]/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+}
 
+/**
+ * 根据项目动态生成分类（tags），all 固定在最前
+ */
+export function buildCategories(projects: Project[]): { value: ProjectCategory; label: string }[] {
+    const tags = Array.from(
+        new Set(
+            projects
+                .map((p) => p.category)
+                .filter((c) => c && c !== "all") // 排除空和 "all"
+        )
+    ).sort((a, b) => a.localeCompare(b));
+
+    return [
+        { value: "all", label: "All" },
+        ...tags.map((tag) => ({
+            value: tag,
+            label: formatLabel(tag),
+        })),
+    ];
+}
