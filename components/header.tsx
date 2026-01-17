@@ -95,7 +95,8 @@ export default function Header({ title }: HeaderProps) {
                                 {[
                                     { href: '/', label: 'Home' },
                                     { href: '/about', label: 'About Me' },
-                                    { href: '/blogs', label: 'Blogs' },
+                                    { href: '/myproject', label: 'My Projects' },
+                                    { href: '/chat', label: 'X2X' },
                                     { href: '/contact', label: 'Contact' },
                                 ].map((link) => (
                                     <li key={link.href}>

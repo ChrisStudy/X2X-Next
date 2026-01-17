@@ -6,7 +6,7 @@ const AboutSection = () => {
 
     return (
         <>
-            <section className="about min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden">
+            <section className="about min-h-screen flex items-center justify-center px-6 relative overflow-hidden">
                 {/* Particle effect at bottom */}
                 <div className="absolute inset-x-0 bottom-0 h-40 pointer-events-none">
                     <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent" />
