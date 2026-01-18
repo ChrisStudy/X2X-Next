@@ -2,6 +2,7 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import ButtonLink from "../../components/ButtonLink";
+import About from "@/pages/about";
 
 function Chat() {
     const { user } = useUser();
@@ -31,3 +32,5 @@ function Chat() {
 
 // ✅ 页面级别 SSR 登录保护
 export default withPageAuthRequired(Chat);
+
+Chat.pageTitle = "X2X Assistant";
