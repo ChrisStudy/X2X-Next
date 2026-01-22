@@ -5,6 +5,7 @@ import styles from '../components/layout.module.css';
 import Link from 'next/link';
 import {Geist, Geist_Mono} from "next/font/google";
 import ParticleWave3D from "@/components/ParticleWave3D";
+import ParticleWave from "@/components/ParticleWave";
 type LayoutProps = {
     children: ReactNode;
     title?: string; // optional per-page title
@@ -24,6 +25,7 @@ export default function Layout({ children, title , home }: LayoutProps) {
     return (
         <div className="dark grid relative min-h-svh grid-rows-[auto_1fr]">
             {/*<ParticleWave3D />*/}
+            {/*<ParticleWave />*/}
             <Header title={title} />
             <main className="flex-row w-full mx-auto p-4">
                 {children}

@@ -1,7 +1,7 @@
 // /pages/chat/[[...chatId]].tsx
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import type { GetServerSideProps } from "next";
+import { getUserRoles } from "@/lib/auth/roles";
 import { Auth0Client } from "@auth0/nextjs-auth0/server";
 import ButtonLink from "../../components/ButtonLink";
 
@@ -14,13 +14,10 @@ type PageProps = {
 
 function Chat({ roles }: PageProps) {
     const { user } = useUser(); // 只含标准 profile
-    const rolesArray = Array.isArray(user?.["https://x2xcreative.com.au/roles"])
-        ? user!["https://x2xcreative.com.au/roles"]
-        : [user!["https://x2xcreative.com.au/roles"]]; // 如果是单个字符串就包成数组
-
-    const isMember = rolesArray.includes("Member");
-    const roleLabel = rolesArray.length > 0 ? rolesArray.join(", ") : "No Role";
-    console.log("Roles claim:", user?.["https://x2xcreative.com.au/roles"]);
+     roles = getUserRoles(user);
+    const isMember = roles.includes("Member");
+    const roleLabel = roles.length > 0 ? roles.join(", ") : "No Role";
+    // console.log("Roles claim:", user?.["https://x2xcreative.com.au/roles"]);
     return (
         <div className="grid w-full h-full items-start justify-center bg-zinc-50 font-sans dark:bg-black">
             <div className="flex justify-between items-center p-4 w-full max-w-4xl">
@@ -32,9 +29,14 @@ function Chat({ roles }: PageProps) {
                 </div>
 
                 {user && (
-                    <ButtonLink href={`/auth/logout?returnTo=http://localhost:3000`}>
+                    <ButtonLink
+                        href={`/auth/logout?returnTo=${encodeURIComponent(
+                            typeof window !== "undefined" ? window.location.origin : "/"
+                        )}`}
+                    >
                         See You Next Time
                     </ButtonLink>
+
                 )}
             </div>
 
@@ -53,22 +55,6 @@ function Chat({ roles }: PageProps) {
         </div>
     );
 }
-
-// ✅ Server-side 获取自定义 claim
-export const getServerSideProps: GetServerSideProps<PageProps> = async (ctx) => {
-    // 传 req 给类实例，拿到 session
-    const session = await auth0.getSession(ctx.req);
-
-    const claims = session?.idTokenClaims as {
-        "https://x2xcreative.com.au/roles"?: string[];
-    };
-
-    return {
-        props: {
-            roles: claims?.["https://x2xcreative.com.au/roles"] ?? [],
-        },
-    };
-};
 
 // ✅ 登录保护
 export default withPageAuthRequired(Chat);

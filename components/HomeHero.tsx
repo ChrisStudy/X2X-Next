@@ -29,7 +29,7 @@ export default function HomeHero() {
     return (
         <section className="relative min-h-[100svh] md:min-h-[70vh] bg-zinc-50 font-sans dark:bg-black">
             <div className="flex flex-col items-center text-center gap-10 pt-[20vh] md:pt-[15vh]">
-                <h1 className="text-5xl font-medium uppercase text-black dark:text-white">
+                <h1 className="text-5xl font-medium uppercase dark:text-white">
                     Chris Xiong
                 </h1>
 
