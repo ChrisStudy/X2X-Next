@@ -26,7 +26,7 @@ export default function Layout({ children, title , home }: LayoutProps) {
         <div className="dark grid relative min-h-svh grid-rows-[auto_1fr]">
             {/*<ParticleWave3D />*/}
             {/*<ParticleWave />*/}
-            <Header title={title} />
+            <Header title={'X2X Creative -' + title} />
             <main className="flex-row w-full mx-auto">
                 {children}
                         {/*{!isHome && (*/}

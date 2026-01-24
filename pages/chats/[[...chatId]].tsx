@@ -26,7 +26,7 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
     const roleLabel = roles.length > 0 ? roles.join(", ") : "No Role";
 
     return (
-        <div className="grid w-full h-full items-start grid-cols-[260px_1fr] bg-zinc-50 font-sans dark:bg-black">
+        <div className="flex h-full bg-background">
             {!isMember && (
                 <div className="w-full max-w-4xl p-4 text-yellow-700 bg-yellow-50 border border-yellow-200 rounded">
                     Your account has limited access.
@@ -37,8 +37,8 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
 
             <ChatSidebar />
 
-            <div className="chat--mian-window flex flex-col w-full h-full secondary-bg-color">
-                <div className="chat-window flex-1">
+            <div className="chat--mian-window flex-1 flex flex-col min-w-0">
+                <div className="chat-window relative overflow-hidden flex-1">
                     <h1>X2X Assistant</h1>
                     <div className="text-sm text-gray-500 mb-6">Hello, how can I help you.</div>
                     <div className="flex justify-between items-center p-4 w-full max-w-4xl">
@@ -51,7 +51,17 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
                     </div>
                 </div>
 
-                <div className="chat-footer p-10 main-bg-color top-border-dashed"></div>
+                <div className="border-t border-border p-4">
+                    <div className="max-w-3xl mx-auto">
+                        <ButtonLink
+                            href={`/auth/logout?returnTo=${encodeURIComponent(
+                                typeof window !== "undefined" ? window.location.origin : "/"
+                            )}`}
+                        >
+                            Send
+                        </ButtonLink>
+                    </div>
+                </div>
             </div>
         </div>
     );

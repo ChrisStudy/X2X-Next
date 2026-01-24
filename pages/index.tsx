@@ -46,5 +46,5 @@ export default function Home({ weather }: Props) {
     );
 }
 
-Home.pageTitle = "X2X Creative - Best";
+Home.pageTitle = "Best Developer";
 

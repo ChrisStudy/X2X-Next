@@ -27,4 +27,4 @@ export default function Myproject({ projects, categories }: Props) {
     );
 }
 
-Myproject.pageTitle = "X2X Creative - My Projects";
+Myproject.pageTitle = "My Projects";

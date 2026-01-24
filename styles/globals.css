@@ -13,6 +13,14 @@
     --gradient-magenta: 300 100% 50%;
     --gradient-purple: 270 100% 60%;
     --foreground: 0 0% 98%;
+    --sidebar-background: 0 0% 8%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 186 100% 50%;
+    --sidebar-primary-foreground: 0 0% 6%;
+    --sidebar-accent: 0 0% 14%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 186 100% 50%;
 }
 
 @theme inline {
@@ -494,4 +502,10 @@ h2.max-w-s.text-3xl.font-semibold.leading-10.tracking-tight.text-black.dark\:tex
     border-color: transparent;
     color: var(--primary-foreground);
     background: linear-gradient(90deg, hsl(var(--gradient-magenta)), hsl(var(--gradient-cyan)));
+}
+.bg-background {
+    background-color: hsl(var(--background));
+}
+.border-sidebar-border {
+    border-color: hsl(var(--sidebar-border));
 }
