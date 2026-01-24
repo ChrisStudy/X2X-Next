@@ -27,7 +27,7 @@ export default function Layout({ children, title , home }: LayoutProps) {
             {/*<ParticleWave3D />*/}
             {/*<ParticleWave />*/}
             <Header title={title} />
-            <main className="flex-row w-full mx-auto p-4">
+            <main className="flex-row w-full mx-auto">
                 {children}
                         {/*{!isHome && (*/}
                         {/*    <div className={styles.backToHome}>*/}

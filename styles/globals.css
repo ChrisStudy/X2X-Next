@@ -6,6 +6,7 @@
 :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --secondary-bg: 0 0% 12%;
     --main-font-color: #ffffff;
     --main-color: #a2a2a2;
     --gradient-cyan: 186 100% 50%;
@@ -87,7 +88,12 @@ img {
     display: block;
 }
 
-
+.secondary-bg-color {
+    background-color: hsl(var(--secondary-bg));
+}
+.main-bg-color {
+    background-color: var(--background);
+}
 .hover-underline {
     font-size: 1rem;
     color: #ffffff;
