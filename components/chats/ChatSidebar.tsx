@@ -33,13 +33,13 @@ export const ChatSidebar = () => {
                     </ButtonLink>
                 </div>
                 <div className="relative overflow-hidden flex-1 px-2"></div>
-                <div className="p-3 border-t border-sidebar-border">
+                <div className="p-3 border-t border-sidebar-border hover-gradient">
                     <ButtonLink
                         href={`/auth/logout?returnTo=${encodeURIComponent(
                             typeof window !== "undefined" ? window.location.origin : "/"
                         )}`}
                     >
-                        See You Next Time
+                        Log out
                     </ButtonLink>
                 </div>
             </div>

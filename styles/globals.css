@@ -7,6 +7,7 @@
     --background: #0a0a0a;
     --foreground: #ededed;
     --secondary-bg: 0 0% 12%;
+    --primary: 186 100% 50%;
     --main-font-color: #ffffff;
     --main-color: #a2a2a2;
     --gradient-cyan: 186 100% 50%;
@@ -211,7 +212,9 @@ h2.max-w-s.text-3xl.font-semibold.leading-10.tracking-tight.text-black.dark\:tex
     border:none;
     cursor: pointer;
 }
-
+.btn-bg-primary {
+    background-color: hsl(var(--primary));
+}
 
 @layer base {
     :root {
@@ -253,6 +256,19 @@ h2.max-w-s.text-3xl.font-semibold.leading-10.tracking-tight.text-black.dark\:tex
 }
 .gradient-bg {
     background: linear-gradient(120deg, #ff00cc 0%, #00FFFF 100%);
+}
+.hover-gradient {
+    border: 1.5px solid #333;
+    border-radius: 8px;
+    background: #0f0f0f;
+}
+
+.hover-gradient:focus-visible {
+    outline: none;
+    border-color: transparent;
+    background:
+            linear-gradient(#0f0f0f, #0f0f0f) padding-box,
+            linear-gradient(120deg, #ff00cc, #00ffff) border-box;
 }
 /* RIGHT BORDER (already exists) */
 .right-border-dashed {
@@ -508,4 +524,7 @@ h2.max-w-s.text-3xl.font-semibold.leading-10.tracking-tight.text-black.dark\:tex
 }
 .border-sidebar-border {
     border-color: hsl(var(--sidebar-border));
+}
+.border-border {
+    border-color: hsl(var(--border));
 }

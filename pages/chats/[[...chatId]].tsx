@@ -5,6 +5,7 @@ import { getUserRoles } from "@/lib/auth/roles";
 import ButtonLink from "@/components/ButtonLink";
 import { ChatSidebar } from "@/components/chats/ChatSidebar";
 import type { NextPage } from "next";
+import {useState} from "react";
 
 // 1️⃣ 定义 Page 类型，允许挂 pageTitle
 type PageWithTitle<P = Record<string, unknown>> = NextPage<P> & {
@@ -21,7 +22,11 @@ type PageProps = {
 const Chat: PageWithTitle<PageProps> = ({ roles }) => {
     const { user } = useUser();
     roles = getUserRoles(user);
-
+    const [messageText, setMessageText] = useState("");
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("Message Text: ", messageText);
+    }
     const isMember = roles.includes("Member");
     const roleLabel = roles.length > 0 ? roles.join(", ") : "No Role";
 
@@ -52,15 +57,14 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
                 </div>
 
                 <div className="border-t border-border p-4">
-                    <div className="max-w-3xl mx-auto">
-                        <ButtonLink
-                            href={`/auth/logout?returnTo=${encodeURIComponent(
-                                typeof window !== "undefined" ? window.location.origin : "/"
-                            )}`}
-                        >
-                            Send
-                        </ButtonLink>
-                    </div>
+                    <form onSubmit={handleSubmit}>
+                        <fieldset className="flex gap-2 items-end">
+                            <textarea value={messageText} onChange={(e) => setMessageText(e.target.value)} placeholder="Send a message..." className="w-full resize-none hover-gradient rounded-md secondary-bg-color p-2 text-white"/>
+                            <button className="btn-bg-primary button gradient px-3 py-2 h-fit" type="submit">
+                                Send
+                            </button>
+                        </fieldset>
+                    </form>
                 </div>
             </div>
         </div>
