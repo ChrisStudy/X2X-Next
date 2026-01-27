@@ -6,6 +6,8 @@ import ButtonLink from "@/components/ButtonLink";
 import { ChatSidebar } from "@/components/chats/ChatSidebar";
 import type { NextPage } from "next";
 import {useState} from "react";
+import {faSignOut} from "@fortawesome/free-solid-svg-icons";
+import { cn } from "@/lib/utils";
 
 // 1️⃣ 定义 Page 类型，允许挂 pageTitle
 type PageWithTitle<P = Record<string, unknown>> = NextPage<P> & {
@@ -32,60 +34,96 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
 
     return (
         <div
-            className="flex bg-background border-sidebar-border box-border border-1 rounded-[8px]"
-            style={{
-                height: "calc(100% - 1rem)", // 0.5rem * 2
-                margin: "0.5rem",
-            }}
+            className={cn(
+                "flex bg-background",
+                isMember
+                    ? "border-sidebar-border box-border border-1 rounded-[8px]"
+                    : ""
+            )}
+            style={
+                isMember
+                    ? {
+                        height: "calc(100% - 1rem)",
+                        margin: "0.5rem",
+                    }
+                    : {
+                        height: "100%",
+                    }
+            }
         >
-                {!isMember && (
-                    <div className="w-full max-w-4xl p-4 text-yellow-700 bg-yellow-50 border border-yellow-200 rounded">
+
+            {!isMember ? (
+                // ❌ 非 Member
+                <div className="flex flex-col items-center justify-center m-auto">
+                    <h2 className="text-center font-bold">
                         Your account has limited access.
-                        <br/>
+                        <br />
                         Please contact the site administrator to unlock full features.
-                    </div>
-                )}
-
-                <ChatSidebar/>
-
-                <div className="chat--mian-window flex-1 flex flex-col min-w-0">
-                    <div className="chat-window relative overflow-hidden flex-1">
-                        <h1>X2X Assistant</h1>
-                        <div className="text-sm text-gray-500 mb-6">Hello, how can I help you.</div>
-                        <div className="flex justify-between items-center p-4 w-full max-w-4xl">
-                            <div>
-                                <h2>Welcome {user?.name}</h2>
-                                <p className="text-sm text-gray-500">
-                                    You are currently under <strong>{roleLabel}</strong>.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="border-t border-border p-4">
-                        <form onSubmit={handleSubmit}>
-                            <fieldset className="flex gap-2 items-end">
-                                <textarea value={messageText} onChange={(e) => setMessageText(e.target.value)}
-                                          placeholder="Send a message..."
-                                          className="w-full resize-none hover-gradient rounded-md secondary-bg-color p-2 text-white"/>
-                                <button className="btn-bg-primary button gradient px-3 py-2 h-fit rounded-[8px]"
-                                        type="submit">
-                                    Send
-                                </button>
-                            </fieldset>
-                        </form>
+                    </h2>
+                    <div className="p-3 mt-10 border-sidebar-border justify-between" >
+                        <ButtonLink
+                            href={`/auth/logout?returnTo=${encodeURIComponent(
+                                typeof window !== "undefined" ? window.location.origin : "/"
+                            )}`} icon={faSignOut} width="full" radius="rounded"
+                        >
+                            Log out
+                        </ButtonLink>
                     </div>
                 </div>
-            </div>
-            );
-            };
 
-            // 4️⃣ 静态属性 pageTitle
-            Chat.pageTitle = "X2X Assistant";
+            ) : (
+                // ✅ Member 才能看到的内容
+                <>
+                    <ChatSidebar />
 
-            // 5️⃣ 包 Auth0 并保留 pageTitle
-            const ProtectedChat = withPageAuthRequired(Chat) as PageWithTitle<PageProps>;
-            ProtectedChat.pageTitle = Chat.pageTitle;
+                    <div className="chat--mian-window flex-1 flex flex-col min-w-0">
+                        <div className="chat-window relative overflow-hidden flex-1">
+                            <h1>X2X Assistant</h1>
+                            <div className="text-sm text-gray-500 mb-6">
+                                Hello, how can I help you.
+                            </div>
 
-            // 6️⃣ 默认导出
-            export default ProtectedChat;
+                            <div className="flex justify-between items-center p-4 w-full max-w-4xl">
+                                <div>
+                                    <h2>Welcome {user?.name}</h2>
+                                    <p className="text-sm text-gray-500">
+                                        You are currently under <strong>{roleLabel}</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="border-t border-border p-4">
+                            <form onSubmit={handleSubmit}>
+                                <fieldset className="flex gap-2 items-end">
+                <textarea
+                    value={messageText}
+                    onChange={(e) => setMessageText(e.target.value)}
+                    placeholder="Send a message..."
+                    className="w-full resize-none hover-gradient rounded-md secondary-bg-color p-2 text-white"
+                />
+                                    <button
+                                        className="btn-bg-primary button gradient px-3 py-2 h-fit rounded-[8px]"
+                                        type="submit"
+                                    >
+                                        Send
+                                    </button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </>
+            )}
+        </div>
+    );
+
+};
+
+Chat.pageTitle = "X2X Assistant";
+
+
+const ProtectedChat = withPageAuthRequired(Chat) as PageWithTitle<PageProps>;
+ProtectedChat.pageTitle = Chat.pageTitle;
+
+
+ export default ProtectedChat;
