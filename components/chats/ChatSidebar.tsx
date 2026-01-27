@@ -2,10 +2,13 @@ import { useState } from "react"
 import ButtonLink from "@/components/ButtonLink";
 import { useIsMobile} from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { faSignOut, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {useUser} from "@auth0/nextjs-auth0";
 
 export const ChatSidebar = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const isMobile = useIsMobile();
+    const { user } = useUser();
     return (
         <>
             {isMobile && sidebarOpen && (
@@ -23,21 +26,24 @@ export const ChatSidebar = () => {
                     isMobile && !sidebarOpen && "-translate-x-full"
                 )}
             >
+                <div>
+                    <h2 className="text-center pt-3 pb-3">Welcome <span className="gradient-text font-bold">{user?.name}</span> </h2>
+                </div>
                 <div className="p-3 flex items-center gap-2">
                     <ButtonLink
                         href={`/auth/logout?returnTo=${encodeURIComponent(
                             typeof window !== "undefined" ? window.location.origin : "/"
-                        )}`}
+                        )}`} width="full" radius="rounded" icon={faPlus}
                     >
                         New Chat
                     </ButtonLink>
                 </div>
                 <div className="relative overflow-hidden flex-1 px-2"></div>
-                <div className="p-3 border-t border-sidebar-border hover-gradient">
+                <div className="p-3 border-t border-sidebar-border justify-between" >
                     <ButtonLink
                         href={`/auth/logout?returnTo=${encodeURIComponent(
                             typeof window !== "undefined" ? window.location.origin : "/"
-                        )}`}
+                        )}`} icon={faSignOut} width="full" radius="rounded"
                     >
                         Log out
                     </ButtonLink>

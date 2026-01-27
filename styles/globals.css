@@ -192,12 +192,18 @@ h2.max-w-s.text-3xl.font-semibold.leading-10.tracking-tight.text-black.dark\:tex
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+.primary-purple-text {
+    color:#ff00cc;
+}
+.primary-blue-text {
+    color:#00ffff;
+}
 .button.gradient {
-    display: inline-block;
+    /*display: inline-block;*/
     color: white;
     border: 1px solid;
     border-color:color-mix(in srgb, #fff 14.499999999999998%, transparent);
-    border-radius: 9999px;
+    /*border-radius: 9999px;*/
     padding: 0.5em 2.75em;
     background: linear-gradient(120deg, #ff00cc 0%, #00FFFF 100%);
     background-size: 0% 100%;
