@@ -8,6 +8,7 @@ import type { NextPage } from "next";
 import {useState} from "react";
 import {faSignOut} from "@fortawesome/free-solid-svg-icons";
 import { cn } from "@/lib/utils";
+import {streamReader} from "openai-edge-stream";
 
 // 1️⃣ 定义 Page 类型，允许挂 pageTitle
 type PageWithTitle<P = Record<string, unknown>> = NextPage<P> & {
@@ -25,10 +26,55 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
     const { user } = useUser();
     roles = getUserRoles(user);
     const [messageText, setMessageText] = useState("");
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+    //     console.log("Message Text: ", messageText);
+    //     const response = await fetch('/api/chat/sendMessage', {
+    //         method: "POST",
+    //         headers: {
+    //             'content-type': 'application/json'
+    //         },
+    //         body: JSON.stringify({message: messageText}),
+    //         });
+    //     const data = response.body;
+    //     if(!data) {
+    //         return
+    //     }
+    //     const reader = data.getReader();
+    //     await streamReader(reader, (message) => {
+    //         console.log('MESSAGE:', message);
+    //     });
+    // };
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("Message Text: ", messageText);
-    }
+
+        console.log('Message Text:', messageText);
+
+        const response = await fetch('/api/chat/sendMessage', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: messageText }),
+        });
+
+        if (!response.body) {
+            console.log('No body stream at all');
+            return;
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+
+            // 每个 chunk 直接打印
+            console.log('OpenAI chunk:', decoder.decode(value));
+        }
+
+        console.log('Stream finished');
+    };
+
     const isMember = roles.includes("Member");
     const roleLabel = roles.length > 0 ? roles.join(", ") : "No Role";
 
@@ -126,4 +172,4 @@ const ProtectedChat = withPageAuthRequired(Chat) as PageWithTitle<PageProps>;
 ProtectedChat.pageTitle = Chat.pageTitle;
 
 
- export default ProtectedChat;
+export default ProtectedChat;
