@@ -9,7 +9,10 @@ import {useState} from "react";
 import {faSignOut} from "@fortawesome/free-solid-svg-icons";
 import { cn } from "@/lib/utils";
 import {streamReader} from "openai-edge-stream";
-
+import { Bot } from 'lucide-react';
+import { WelcomeChat } from "@/components/chats/WelcomeChat";
+import { v4 as uuid } from 'uuid';
+import {Message} from "@/components/chats/Message";
 // 1️⃣ 定义 Page 类型，允许挂 pageTitle
 type PageWithTitle<P = Record<string, unknown>> = NextPage<P> & {
     pageTitle?: string;
@@ -20,59 +23,47 @@ type PageWithTitle<P = Record<string, unknown>> = NextPage<P> & {
 type PageProps = {
     roles: string[];
 };
-
+type ChatMessage = {
+    _id: string;
+    role: "user" | "assistant";
+    content: string;
+};
 // 3️⃣ 定义 Chat 页面
 const Chat: PageWithTitle<PageProps> = ({ roles }) => {
     const { user } = useUser();
     roles = getUserRoles(user);
+    const [incomingMessage, setIncomingMessage] =useState("");
     const [messageText, setMessageText] = useState("");
-    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault();
-    //     console.log("Message Text: ", messageText);
-    //     const response = await fetch('/api/chat/sendMessage', {
-    //         method: "POST",
-    //         headers: {
-    //             'content-type': 'application/json'
-    //         },
-    //         body: JSON.stringify({message: messageText}),
-    //         });
-    //     const data = response.body;
-    //     if(!data) {
-    //         return
-    //     }
-    //     const reader = data.getReader();
-    //     await streamReader(reader, (message) => {
-    //         console.log('MESSAGE:', message);
-    //     });
-    // };
+    const [newChatMessages, setNewChatMessages] = useState<ChatMessage[]>([]);
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setNewChatMessages(prev => [
+            ...prev,
+            {
+                _id: uuid(),
+                role: "user",
+                content: messageText,
+            }
+        ]);
 
-        console.log('Message Text:', messageText);
 
+        console.log("Message Text: ", messageText);
         const response = await fetch('/api/chat/sendMessage', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: messageText }),
+            method: "POST",
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({message: messageText}),
+            });
+        const data = response.body;
+        if(!data) {
+            return
+        }
+        const reader = data.getReader();
+        await streamReader(reader, (message) => {
+            console.log('MESSAGE:', message);
+            setIncomingMessage(s => `${s}${message.content}`);
         });
-
-        if (!response.body) {
-            console.log('No body stream at all');
-            return;
-        }
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-
-        while (true) {
-            const { value, done } = await reader.read();
-            if (done) break;
-
-            // 每个 chunk 直接打印
-            console.log('OpenAI chunk:', decoder.decode(value));
-        }
-
-        console.log('Stream finished');
     };
 
     const isMember = roles.includes("Member");
@@ -123,20 +114,19 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
                     <ChatSidebar />
 
                     <div className="chat--mian-window flex-1 flex flex-col min-w-0">
-                        <div className="chat-window relative overflow-hidden flex-1">
-                            <h1>X2X Assistant</h1>
-                            <div className="text-sm text-gray-500 mb-6">
-                                Hello, how can I help you.
-                            </div>
-
-                            <div className="flex justify-between items-center p-4 w-full max-w-4xl">
-                                <div>
-                                    <h2>Welcome {user?.name}</h2>
-                                    <p className="text-sm text-gray-500">
-                                        You are currently under <strong>{roleLabel}</strong>.
-                                    </p>
+                        <div className="chat-message-window relative overflow-hidden flex-1">
+                            {incomingMessage ? (
+                                <div className="chat-messages">
+                                    {newChatMessages.map(message=>(
+                                        <Message key={message._id} role={message.role} content={message.content}/>
+                                    ))}
+                                    {!!incomingMessage && (
+                                        <Message role="assistant" content={incomingMessage}/>
+                                    )}
                                 </div>
-                            </div>
+                            ) : (
+                                <WelcomeChat />
+                            )}
                         </div>
 
                         <div className="border-t border-border p-4">
