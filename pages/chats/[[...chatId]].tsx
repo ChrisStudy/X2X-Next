@@ -46,8 +46,6 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
             }
         ]);
 
-
-        console.log("Message Text: ", messageText);
         const response = await fetch('/api/chat/sendMessage', {
             method: "POST",
             headers: {
@@ -61,7 +59,6 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
         }
         const reader = data.getReader();
         await streamReader(reader, (message) => {
-            console.log('MESSAGE:', message);
             setIncomingMessage(s => `${s}${message.content}`);
         });
     };
