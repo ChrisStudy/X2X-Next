@@ -37,57 +37,70 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
     const [incomingMessage, setIncomingMessage] = useState("");
     const [messageText, setMessageText] = useState("");
     const [newChatMessages, setNewChatMessages] = useState<ChatMessage[]>([]);
+    const [generatingResponse, setGeneratingResponse] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // 1️⃣ 如果有上次 AI 的回复，先归档到消息列表里
-        if (incomingMessage) {
+        // 🔥 如果正在生成回复，直接返回，不处理
+        if (generatingResponse) {
+            return;
+        }
+
+        setGeneratingResponse(true);
+
+        try {
+            // 1️⃣ 如果有上次 AI 的回复，先归档到消息列表里
+            if (incomingMessage) {
+                setNewChatMessages((prev) => [
+                    ...prev,
+                    {
+                        _id: uuid(),
+                        role: "assistant",
+                        content: incomingMessage,
+                    },
+                ]);
+            }
+
+            // 2️⃣ 先把当前输入存到局部变量，避免后面 setState 清空后 fetch 拿到空值
+            const currentMessage = messageText;
+
+            // 3️⃣ 清空 incomingMessage，准备接收新的 stream
+            setIncomingMessage("");
+
+            // 4️⃣ 把用户消息加进消息列表
             setNewChatMessages((prev) => [
                 ...prev,
                 {
                     _id: uuid(),
-                    role: "assistant",
-                    content: incomingMessage,
+                    role: "user",
+                    content: currentMessage,
                 },
             ]);
+
+            // 5️⃣ 清空输入框
+            setMessageText("");
+
+            // 6️⃣ 发起请求 + 接收 stream
+            const response = await fetch("/api/chat/sendMessage", {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({ message: currentMessage }),
+            });
+
+            const data = response.body;
+            if (!data) return;
+
+            const reader = data.getReader();
+            await streamReader(reader, (message) => {
+                setIncomingMessage((s) => `${s}${message.content}`);
+            });
+        } finally {
+            // 🔥 无论成功还是失败，都要重置状态
+            setGeneratingResponse(false);
         }
-
-        // 2️⃣ 先把当前输入存到局部变量，避免后面 setState 清空后 fetch 拿到空值
-        const currentMessage = messageText;
-
-        // 3️⃣ 清空 incomingMessage，准备接收新的 stream
-        setIncomingMessage("");
-
-        // 4️⃣ 把用户消息加进消息列表
-        setNewChatMessages((prev) => [
-            ...prev,
-            {
-                _id: uuid(),
-                role: "user",
-                content: currentMessage,
-            },
-        ]);
-
-        // 5️⃣ 清空输入框
-        setMessageText("");
-
-        // 6️⃣ 发起请求 + 接收 stream
-        const response = await fetch("/api/chat/sendMessage", {
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
-            },
-            body: JSON.stringify({ message: currentMessage }),
-        });
-
-        const data = response.body;
-        if (!data) return;
-
-        const reader = data.getReader();
-        await streamReader(reader, (message) => {
-            setIncomingMessage((s) => `${s}${message.content}`);
-        });
     };
 
     const isMember = roles.includes("Member");
@@ -136,8 +149,8 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
                 <>
                     <ChatSidebar />
 
-                    <div className="chat--mian-window flex-1 flex flex-col min-w-0">
-                        <div className="chat-message-window relative overflow-hidden flex-1">
+                    <div className="chat--mian-window flex-1 flex flex-col overflow-hidden min-w-0">
+                        <div className="chat-message-window relative overflow-y-scroll flex-1 max-h-[75vh]">
                             {/* 修复：用 length 判断，避免第一条 user 消息闪消失 */}
                             {newChatMessages.length > 0 || incomingMessage ? (
                                 <div className="chat-messages">
@@ -153,15 +166,19 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
 
                         <div className="border-t border-border p-4">
                             <form onSubmit={handleSubmit}>
-                                <fieldset className="flex gap-2 items-end">
-                  <textarea
-                      value={messageText}
-                      onChange={(e) => setMessageText(e.target.value)}
-                      placeholder="Send a message..."
-                      className="w-full resize-none hover-gradient rounded-md secondary-bg-color p-2 text-white"
-                  />
-                                    <button className="btn-bg-primary button gradient px-3 py-2 h-fit rounded-[8px]" type="submit">
-                                        Send
+                                <fieldset className="flex gap-2 items-end" disabled={generatingResponse}>
+                                    <textarea
+                                        value={messageText}
+                                        onChange={(e) => setMessageText(e.target.value)}
+                                        placeholder="Send a message..."
+                                        className="w-full resize-none hover-gradient rounded-md secondary-bg-color p-2 text-white"
+                                    />
+                                    <button
+                                        className="btn-bg-primary button gradient px-3 py-2 h-fit rounded-[8px]"
+                                        type="submit"
+                                        disabled={generatingResponse}
+                                    >
+                                        {generatingResponse ? "Generating..." : "Send"}
                                     </button>
                                 </fieldset>
                             </form>

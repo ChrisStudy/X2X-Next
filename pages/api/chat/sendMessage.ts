@@ -7,7 +7,10 @@ export const config = {
 export default async function handler(req: Request) {
     try {
         const { message } = await req.json();
-
+        const initialChatMessage = {
+            role: "system",
+            content: "Your name is X2X Assistant. An incredibly intelligent and quick-thinking AI, you were created by X2X Creative via Chris Xiong. Your response must be formatted as markdown."
+        };
         // 调用 OpenAI Chat Completion 流
         const stream = await OpenAIEdgeStream(
             'https://api.openai.com/v1/chat/completions',
@@ -18,8 +21,8 @@ export default async function handler(req: Request) {
                 },
                 method: 'POST',
                 body: JSON.stringify({
-                    model: 'gpt-5.2',
-                    messages: [{ role: 'user', content: message }],
+                    model: 'gpt-5-mini',
+                    messages: [initialChatMessage, { role: 'user', content: message }],
                     stream: true, // 流式返回
                 }),
             }
