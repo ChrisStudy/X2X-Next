@@ -149,7 +149,7 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
                 <>
                     <ChatSidebar />
 
-                    <div className="chat--mian-window flex-1 flex flex-col overflow-hidden min-w-0">
+                    <div className="chat--mian-window flex-1 flex flex-col justify-between overflow-hidden min-w-0">
                         <div className="chat-message-window relative overflow-y-scroll flex-1 max-h-[75vh]">
                             {/* 修复：用 length 判断，避免第一条 user 消息闪消失 */}
                             {newChatMessages.length > 0 || incomingMessage ? (
@@ -164,7 +164,7 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
                             )}
                         </div>
 
-                        <div className="border-t border-border p-4">
+                        <div className="border-t border-border p-4 h-[115px]">
                             <form onSubmit={handleSubmit}>
                                 <fieldset className="flex gap-2 items-end" disabled={generatingResponse}>
                                     <textarea
