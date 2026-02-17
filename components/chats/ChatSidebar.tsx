@@ -1,11 +1,29 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import ButtonLink from "@/components/ButtonLink";
 import { useIsMobile} from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
-import { faSignOut, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faMessage, faSignOut, faPlus } from "@fortawesome/free-solid-svg-icons";
 import {useUser} from "@auth0/nextjs-auth0";
+import Link from "next/link";
+import ChatLink from "@/components/ui/ChatLink";
+type Chat = {
+    _id: string;
+    title: string;
+};
 
 export const ChatSidebar = () => {
+    const [chatlist, setChatList] = useState<Chat[]>([]);
+    useEffect( () =>{
+        const loadChatList = async () => {
+            const response = await fetch('/api/chat/getChatList', {
+                method: "POST",
+            });
+            const json = await response.json();
+            console.log("Chat List", json);
+            setChatList(json?.chats || []);
+        };
+        loadChatList()
+    },[]);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const isMobile = useIsMobile();
     const { user } = useUser();
@@ -19,7 +37,7 @@ export const ChatSidebar = () => {
             )}
             <div
                 className={cn(
-                    "flex-shrink-0 bg-sidebar border-r border-sidebar-border flex flex-col z-50",
+                    "flex-shrink-0 bg-sidebar overflow-hidden border-r border-sidebar-border flex flex-col z-50",
                     isMobile
                         ? "fixed inset-y-0 left-0 w-64 transition-transform duration-300 ease-in-out"
                         : "w-64",
@@ -31,14 +49,18 @@ export const ChatSidebar = () => {
                 </div>
                 <div className="p-3 flex items-center gap-2">
                     <ButtonLink
-                        href={`/auth/logout?returnTo=${encodeURIComponent(
-                            typeof window !== "undefined" ? window.location.origin : "/"
-                        )}`} width="full" radius="rounded" icon={faPlus}
+                        href={`/chats`} width="full" radius="rounded" icon={faPlus}
                     >
                         New Chat
                     </ButtonLink>
                 </div>
-                <div className="relative overflow-hidden flex-1 px-2"></div>
+                <div className="relative overflow-auto flex-1 px-2">
+                    {chatlist.map(chat=> (
+                        <ChatLink key={chat._id} href={`/chats/${chat._id}`} icon={faMessage}>
+                            {chat.title}
+                        </ChatLink>
+                    ))}
+                </div>
                 <div className="p-3 border-t border-sidebar-border justify-between" >
                     <ButtonLink
                         href={`/auth/logout?returnTo=${encodeURIComponent(
