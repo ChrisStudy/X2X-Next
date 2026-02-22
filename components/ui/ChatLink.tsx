@@ -7,12 +7,14 @@ interface ChatLinkProps {
     children: React.ReactNode;
     href: string;
     icon?: IconDefinition;
+    className?: string;
 }
 
 export default function ChatLink({
                                        children,
                                        href,
-                                       icon
+                                       icon,
+                                       className,
                                    }: ChatLinkProps) {
     const baseClasses =
         "flex items-center justify-start gap-x-2 p-2";
@@ -20,7 +22,7 @@ export default function ChatLink({
     return (
         <Link
             href={href}
-            className={`${baseClasses}`}
+            className={`${baseClasses}  ${className || ""}`}
         >
             {icon && <FontAwesomeIcon icon={icon} />}
             {children}

@@ -11,7 +11,7 @@ type Chat = {
     title: string;
 };
 
-export const ChatSidebar = () => {
+export const ChatSidebar = ({ chatId }: { chatId: string }) => {
     const [chatlist, setChatList] = useState<Chat[]>([]);
     useEffect( () =>{
         const loadChatList = async () => {
@@ -23,7 +23,7 @@ export const ChatSidebar = () => {
             setChatList(json?.chats || []);
         };
         loadChatList()
-    },[]);
+    },[chatId]);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const isMobile = useIsMobile();
     const { user } = useUser();
@@ -56,7 +56,7 @@ export const ChatSidebar = () => {
                 </div>
                 <div className="relative overflow-auto flex-1 px-2">
                     {chatlist.map(chat=> (
-                        <ChatLink key={chat._id} href={`/chats/${chat._id}`} icon={faMessage}>
+                        <ChatLink key={chat._id} href={`/chats/${chat._id}`} icon={faMessage} className={chatId === chat._id ? "gradient-bg rounded-md" : ""}>
                             {chat.title}
                         </ChatLink>
                     ))}

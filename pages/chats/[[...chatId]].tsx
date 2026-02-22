@@ -5,14 +5,15 @@ import { getUserRoles } from "@/lib/auth/roles";
 import ButtonLink from "@/components/ButtonLink";
 import { ChatSidebar } from "@/components/chats/ChatSidebar";
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { cn } from "@/lib/utils";
 import { streamReader } from "openai-edge-stream";
 import { WelcomeChat } from "@/components/chats/WelcomeChat";
 import { v4 as uuid } from "uuid";
 import { Message } from "@/components/chats/Message";
-
+import {useRouter} from "next/router";
+import { GetServerSidePropsContext } from "next";
 // 1️⃣ 定义 Page 类型，允许挂 pageTitle
 type PageWithTitle<P = Record<string, unknown>> = NextPage<P> & {
     pageTitle?: string;
@@ -21,6 +22,7 @@ type PageWithTitle<P = Record<string, unknown>> = NextPage<P> & {
 // 2️⃣ PageProps
 type PageProps = {
     roles: string[];
+    chatId: string;
 };
 
 type ChatMessage = {
@@ -30,15 +32,22 @@ type ChatMessage = {
 };
 
 // 3️⃣ 定义 Chat 页面
-const Chat: PageWithTitle<PageProps> = ({ roles }) => {
+const Chat: PageWithTitle<PageProps> = ({ roles, chatId }) => {
     const { user } = useUser();
     roles = getUserRoles(user);
 
+    const [newChatId, setNewChatId] = useState<string | null>(null);
     const [incomingMessage, setIncomingMessage] = useState("");
     const [messageText, setMessageText] = useState("");
     const [newChatMessages, setNewChatMessages] = useState<ChatMessage[]>([]);
     const [generatingResponse, setGeneratingResponse] = useState(false);
-
+    const router = useRouter();
+    useEffect(()=> {
+        if (!generatingResponse && newChatId){
+            setNewChatId(null);
+            router.push(`/chats/${newChatId}`);
+        }
+    },[newChatId, generatingResponse,router]);
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -96,7 +105,11 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
 
             const reader = data.getReader();
             await streamReader(reader, (message) => {
-                setIncomingMessage((s) => `${s}${message.content}`);
+                if(message.event === "newChatId") {
+                    setNewChatId(message.content);
+                }else {
+                    setIncomingMessage((s) => `${s}${message.content}`);
+                }
             });
         } finally {
             // 🔥 无论成功还是失败，都要重置状态
@@ -148,7 +161,7 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
             ) : (
                 // ✅ Member 才能看到的内容
                 <>
-                    <ChatSidebar />
+                    <ChatSidebar chatId={chatId}/>
 
                     <div className="chat--mian-window flex-1 flex flex-col justify-between overflow-hidden min-w-0">
                         <div className="chat-message-window relative overflow-y-scroll flex-1 max-h-[75vh]">
@@ -189,6 +202,15 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
             )}
         </div>
     );
+};
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) =>{
+    const chatId = ctx.params?.chatId?.[0] || null;
+    return {
+        props: {
+            chatId,
+        },
+    };
 };
 
 Chat.pageTitle = "X2X Assistant";
