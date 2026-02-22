@@ -80,31 +80,24 @@ const Chat: PageWithTitle<PageProps> = ({ roles }) => {
 
             // 5️⃣ 清空输入框
             setMessageText("");
-            const response = await fetch('/api/chat/createNewChat', {
-                    method: "POST",
-                    headers: {
-                        "content-type": "application/json",
-                    },
-                    body: JSON.stringify({ message: currentMessage }),
-            });
-            const json = await response.json();
-            console.log("NEW CHAT", json);
+
+            // console.log("NEW CHAT", json);
             // 6️⃣ 发起请求 + 接收 stream
-            // const response = await fetch("/api/chat/sendMessage", {
-            //     method: "POST",
-            //     headers: {
-            //         "content-type": "application/json",
-            //     },
-            //     body: JSON.stringify({ message: currentMessage }),
-            // });
-            //
-            // const data = response.body;
-            // if (!data) return;
-            //
-            // const reader = data.getReader();
-            // await streamReader(reader, (message) => {
-            //     setIncomingMessage((s) => `${s}${message.content}`);
-            // });
+            const response = await fetch("/api/chat/sendMessage", {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({ message: currentMessage }),
+            });
+
+            const data = response.body;
+            if (!data) return;
+
+            const reader = data.getReader();
+            await streamReader(reader, (message) => {
+                setIncomingMessage((s) => `${s}${message.content}`);
+            });
         } finally {
             // 🔥 无论成功还是失败，都要重置状态
             setGeneratingResponse(false);

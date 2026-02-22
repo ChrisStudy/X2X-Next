@@ -12,6 +12,16 @@ export default async function handler(req: Request) {
             content: "Your name is X2X Assistant. An incredibly intelligent and quick-thinking AI, you were created by X2X Creative via Chris Xiong. Your response must be formatted as markdown."
         };
         // 调用 OpenAI Chat Completion 流
+        const response = await fetch(`${req.headers.get("origin")}/api/chat/createNewChat`, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+                cookie: req.headers.get("cookie") || "",
+            },
+            body: JSON.stringify({ message: message }),
+        });
+        const json = await response.json();
+        const chatId = json._id;
         const stream = await OpenAIEdgeStream(
             'https://api.openai.com/v1/chat/completions',
             {
@@ -25,6 +35,27 @@ export default async function handler(req: Request) {
                     messages: [initialChatMessage, { role: 'user', content: message }],
                     stream: true, // 流式返回
                 }),
+            },
+            {
+                onBeforeStream: ({emit}) => {
+                    emit(chatId, "newChatId");
+
+                },
+                onAfterStream: async ({fullContent}) => {
+                    await fetch(`${req.headers.get("origin")}/api/chat/addMessageToChat`, {
+                            method: "POST",
+                            headers: {
+                                "content-type": "application/json",
+                                cookie: req.headers.get("cookie") || "",
+                            },
+                            body: JSON.stringify({
+                                chatId,
+                                role: "assistant",
+                                content: fullContent,
+                            }),
+                        }
+                    );
+                },
             }
         );
         console.log("Stream object:", stream);
