@@ -14,6 +14,9 @@ import { v4 as uuid } from "uuid";
 import { Message } from "@/components/chats/Message";
 import {useRouter} from "next/router";
 import { GetServerSidePropsContext } from "next";
+import {auth0} from "@/lib/auth0";
+import clientPromise from "@/lib/mongodb";
+import {ObjectId} from "mongodb";
 // 1️⃣ 定义 Page 类型，允许挂 pageTitle
 type PageWithTitle<P = Record<string, unknown>> = NextPage<P> & {
     pageTitle?: string;
@@ -23,6 +26,8 @@ type PageWithTitle<P = Record<string, unknown>> = NextPage<P> & {
 type PageProps = {
     roles: string[];
     chatId: string;
+    title: string;
+    messages: [];
 };
 
 type ChatMessage = {
@@ -32,7 +37,8 @@ type ChatMessage = {
 };
 
 // 3️⃣ 定义 Chat 页面
-const Chat: PageWithTitle<PageProps> = ({ roles, chatId }) => {
+const Chat: PageWithTitle<PageProps> = ({ roles, chatId, title, messages }) => {
+    console.log("props: ", title, messages);
     const { user } = useUser();
     roles = getUserRoles(user);
 
@@ -206,11 +212,38 @@ const Chat: PageWithTitle<PageProps> = ({ roles, chatId }) => {
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) =>{
     const chatId = ctx.params?.chatId?.[0] || null;
+
+    if(chatId) {
+        const session = await auth0.getSession(ctx.req);
+        if (!session || !session.user) {
+            ctx.res.writeHead(401, { 'Content-Type': 'application/json' });
+            ctx.res.end(JSON.stringify({ message: "Unauthorized" }));
+            return { props: {} };
+        }
+        const { user } = session;
+        const client = await clientPromise;
+        const db = client.db("X2XCreativeChat");
+        const chat = await db.collection("chats").findOne({
+            userId: user.sub,
+            _id: new ObjectId(chatId),
+        });
+        if (!chat) {
+            return { props: {} };
+        }
+        return {
+            props: {
+                chatId,
+                title: chat.title,
+                messages: chat.messages.map ((message:any) =>({
+                    ...message,
+                    _id: uuid(),
+                })),
+            },
+        };
+    }
     return {
-        props: {
-            chatId,
-        },
-    };
+        props: {}
+    }
 };
 
 Chat.pageTitle = "X2X Assistant";

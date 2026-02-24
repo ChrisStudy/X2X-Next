@@ -17,7 +17,7 @@ export default function ChatLink({
                                        className,
                                    }: ChatLinkProps) {
     const baseClasses =
-        "flex items-center justify-start gap-x-2 p-2";
+        "flex items-center justify-start gap-x-2 p-2 overflow-hidden text-nowrap line-clamp-1";
 
     return (
         <Link
