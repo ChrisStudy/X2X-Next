@@ -6,22 +6,41 @@ export const config = {
 // export const config = { runtime: 'nodejs' };
 export default async function handler(req: Request) {
     try {
-        const { message } = await req.json();
+        const { chatId: chatIdFromParam, message } = await req.json();
+        let chatId = chatIdFromParam;
+        let newChatId: string | undefined;
         const initialChatMessage = {
             role: "system",
             content: "Your name is X2X Assistant. An incredibly intelligent and quick-thinking AI, you were created by X2X Creative via Chris Xiong. Your response must be formatted as markdown."
         };
-        // 调用 OpenAI Chat Completion 流
-        const response = await fetch(`${req.headers.get("origin")}/api/chat/createNewChat`, {
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
-                cookie: req.headers.get("cookie") || "",
-            },
-            body: JSON.stringify({ message: message }),
-        });
-        const json = await response.json();
-        const chatId = json._id;
+        if (chatId) {
+            // 调用 OpenAI Chat Completion 流
+            const response = await fetch(`${req.headers.get("origin")}/api/chat/addMessageToChat`, {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                    cookie: req.headers.get("cookie") || "",
+                },
+                body: JSON.stringify({
+                    chatId,
+                    role:"user",
+                    content: message,
+                }),
+            });
+        } else {
+            // 调用 OpenAI Chat Completion 流
+            const response = await fetch(`${req.headers.get("origin")}/api/chat/createNewChat`, {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                    cookie: req.headers.get("cookie") || "",
+                },
+                body: JSON.stringify({ message: message }),
+            });
+            const json = await response.json();
+            chatId = json._id;
+            newChatId = json._id;
+        }
         const stream = await OpenAIEdgeStream(
             'https://api.openai.com/v1/chat/completions',
             {
@@ -38,7 +57,9 @@ export default async function handler(req: Request) {
             },
             {
                 onBeforeStream: ({emit}) => {
-                    emit(chatId, "newChatId");
+                    if (newChatId) {
+                        emit(newChatId, "newChatId");
+                    }
 
                 },
                 onAfterStream: async ({fullContent}) => {

@@ -56,7 +56,7 @@ export const ChatSidebar = ({ chatId }: { chatId: string }) => {
                 </div>
                 <div className="relative overflow-auto flex-1 px-2">
                     {chatlist.map(chat=> (
-                        <ChatLink key={chat._id} href={`/chats/${chat._id}`} icon={faMessage} className={chatId === chat._id ? "gradient-bg rounded-md" : ""}>
+                        <ChatLink title={chat.title} key={chat._id} href={`/chats/${chat._id}`} icon={faMessage} className={chatId === chat._id ? "gradient-bg rounded-md" : ""}>
                             {chat.title}
                         </ChatLink>
                     ))}

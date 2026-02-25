@@ -27,7 +27,7 @@ type PageProps = {
     roles: string[];
     chatId: string;
     title: string;
-    messages: [];
+    messages: ChatMessage[];
 };
 
 type ChatMessage = {
@@ -37,7 +37,7 @@ type ChatMessage = {
 };
 
 // 3️⃣ 定义 Chat 页面
-const Chat: PageWithTitle<PageProps> = ({ roles, chatId, title, messages }) => {
+const Chat: PageWithTitle<PageProps> = ({ roles, chatId, title, messages =[] }) => {
     console.log("props: ", title, messages);
     const { user } = useUser();
     roles = getUserRoles(user);
@@ -47,7 +47,32 @@ const Chat: PageWithTitle<PageProps> = ({ roles, chatId, title, messages }) => {
     const [messageText, setMessageText] = useState("");
     const [newChatMessages, setNewChatMessages] = useState<ChatMessage[]>([]);
     const [generatingResponse, setGeneratingResponse] = useState(false);
+    const [fullMessage, setFullMessage] =  useState("");
     const router = useRouter();
+
+    // when our route changes
+    useEffect(() => {
+        setNewChatMessages([]);
+        setNewChatId(null);
+
+    }, [chatId]);
+
+
+    //save the newly streamed message to new chat messages
+    useEffect(() => {
+        if (!generatingResponse && fullMessage) {
+            setNewChatMessages(prev => [...prev,{
+                _id: uuid(),
+                role:"assistant",
+                content: fullMessage,
+            }
+
+            ])
+            setFullMessage("");
+        }
+    }, [generatingResponse,fullMessage]);
+
+    //if we've created a new chat
     useEffect(()=> {
         if (!generatingResponse && newChatId){
             setNewChatId(null);
@@ -63,7 +88,7 @@ const Chat: PageWithTitle<PageProps> = ({ roles, chatId, title, messages }) => {
         }
 
         setGeneratingResponse(true);
-
+        let content = "";
         try {
             // 1️⃣ 如果有上次 AI 的回复，先归档到消息列表里
             if (incomingMessage) {
@@ -103,29 +128,33 @@ const Chat: PageWithTitle<PageProps> = ({ roles, chatId, title, messages }) => {
                 headers: {
                     "content-type": "application/json",
                 },
-                body: JSON.stringify({ message: currentMessage }),
+                body: JSON.stringify({chatId, message: currentMessage }),
             });
 
             const data = response.body;
             if (!data) return;
 
             const reader = data.getReader();
+
             await streamReader(reader, (message) => {
                 if(message.event === "newChatId") {
                     setNewChatId(message.content);
                 }else {
                     setIncomingMessage((s) => `${s}${message.content}`);
+                    content = content + message.content;
                 }
             });
         } finally {
             // 🔥 无论成功还是失败，都要重置状态
+            setFullMessage(content);
+            setIncomingMessage("");
             setGeneratingResponse(false);
         }
     };
 
     const isMember = roles.includes("Member");
     const roleLabel = roles.length > 0 ? roles.join(", ") : "No Role";
-
+    const allMessages = [...messages, ...newChatMessages];
     return (
         <div
             className={cn(
@@ -172,9 +201,9 @@ const Chat: PageWithTitle<PageProps> = ({ roles, chatId, title, messages }) => {
                     <div className="chat--mian-window flex-1 flex flex-col justify-between overflow-hidden min-w-0">
                         <div className="chat-message-window relative overflow-y-scroll flex-1 max-h-[75vh]">
                             {/* 修复：用 length 判断，避免第一条 user 消息闪消失 */}
-                            {newChatMessages.length > 0 || incomingMessage ? (
+                            {allMessages.length > 0 || incomingMessage ? (
                                 <div className="chat-messages">
-                                    {newChatMessages.map((message) => (
+                                    {allMessages.map((message) => (
                                         <Message key={message._id} role={message.role} content={message.content} />
                                     ))}
                                     {!!incomingMessage && <Message role="assistant" content={incomingMessage} />}
@@ -234,7 +263,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) =>{
             props: {
                 chatId,
                 title: chat.title,
-                messages: chat.messages.map ((message:any) =>({
+                messages: chat.messages.map ((message:ChatMessage) =>({
                     ...message,
                     _id: uuid(),
                 })),

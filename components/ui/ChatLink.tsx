@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 interface ChatLinkProps {
     children: React.ReactNode;
     href: string;
+    title: string;
     icon?: IconDefinition;
     className?: string;
 }
@@ -15,9 +16,10 @@ export default function ChatLink({
                                        href,
                                        icon,
                                        className,
+                                       title,
                                    }: ChatLinkProps) {
     const baseClasses =
-        "flex items-center justify-start gap-x-2 p-2 overflow-hidden text-nowrap line-clamp-1";
+        "flex items-center justify-start gap-x-2 p-2";
 
     return (
         <Link
@@ -25,7 +27,9 @@ export default function ChatLink({
             className={`${baseClasses}  ${className || ""}`}
         >
             {icon && <FontAwesomeIcon icon={icon} />}
-            {children}
+            <span title={title} className={'text-ellipsis overflow-hidden whitespace-nowrap line-clamp-1'}>
+                {children}
+            </span>
         </Link>
     );
 }
