@@ -9,6 +9,7 @@ export default async function handler(req: Request) {
         const { chatId: chatIdFromParam, message } = await req.json();
         let chatId = chatIdFromParam;
         let newChatId: string | undefined;
+        let chatMessages = [];
         const initialChatMessage = {
             role: "system",
             content: "Your name is X2X Assistant. An incredibly intelligent and quick-thinking AI, you were created by X2X Creative via Chris Xiong. Your response must be formatted as markdown."
@@ -27,6 +28,9 @@ export default async function handler(req: Request) {
                     content: message,
                 }),
             });
+            const json = await response.json();
+            console.log("json:", JSON.stringify(json));  // 加这里
+            chatMessages = json.chat.messages || [];  // ✅ 对的
         } else {
             // 调用 OpenAI Chat Completion 流
             const response = await fetch(`${req.headers.get("origin")}/api/chat/createNewChat`, {
@@ -40,7 +44,19 @@ export default async function handler(req: Request) {
             const json = await response.json();
             chatId = json._id;
             newChatId = json._id;
+            chatMessages = json.messages || [];
         }
+
+        // const messagesToInclude = [];
+        chatMessages.reverse();
+        const messagesToInclude = chatMessages.slice(-10).map((msg: any) => ({
+            role: msg.role,
+            content: msg.content,
+        }));
+
+        messagesToInclude.reverse();
+
+        // console.log(messagesToInclude);
         const stream = await OpenAIEdgeStream(
             'https://api.openai.com/v1/chat/completions',
             {
@@ -51,7 +67,7 @@ export default async function handler(req: Request) {
                 method: 'POST',
                 body: JSON.stringify({
                     model: 'gpt-5-mini',
-                    messages: [initialChatMessage, { role: 'user', content: message }],
+                    messages: [initialChatMessage, ...messagesToInclude],
                     stream: true, // 流式返回
                 }),
             },

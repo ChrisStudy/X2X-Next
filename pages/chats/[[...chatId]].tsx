@@ -38,7 +38,7 @@ type ChatMessage = {
 
 // 3️⃣ 定义 Chat 页面
 const Chat: PageWithTitle<PageProps> = ({ roles, chatId, title, messages =[] }) => {
-    console.log("props: ", title, messages);
+    // console.log("props: ", title, messages);
     const { user } = useUser();
     roles = getUserRoles(user);
 

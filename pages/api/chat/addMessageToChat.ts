@@ -40,14 +40,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             returnDocument: "after"
         });
         // Check if chat exists
-        if (!chat || !chat.value) {
+        if (!chat) {
             return res.status(404).json({ message: "Chat not found" });
         }
 
         res.status(200).json({
             chat: {
-                ...chat.value,
-                _id: chat.value._id.toString(),
+                _id: chat._id.toString(),
+                userId: chat.userId,
+                messages: chat.messages,
+                title: chat.title,
+                createdAt: chat.createdAt,
             },
         });
     }catch(e){
