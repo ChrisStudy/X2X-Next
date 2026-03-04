@@ -41,7 +41,7 @@ export default function Home({ weather }: Props) {
     return (
         <div className="grid w-full h-full items-center justify-center bg-zinc-50 font-sans dark:bg-black">
             <HomeHero />
-            <Weather current={weather.current} today={weather.today} daily={weather.daily} />
+            {/*<Weather current={weather.current} today={weather.today} daily={weather.daily} />*/}
         </div>
     );
 }

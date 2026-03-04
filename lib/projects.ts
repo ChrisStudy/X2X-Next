@@ -62,7 +62,9 @@ export async function getAllProjects(): Promise<Project[]> {
         })
     );
 
-    return projects;
+    return projects.sort((a, b) => {
+        return String(b.year).localeCompare(String(a.year));
+    });
 }
 
 /**

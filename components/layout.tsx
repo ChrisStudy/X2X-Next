@@ -5,7 +5,12 @@ import styles from '../components/layout.module.css';
 import Link from 'next/link';
 import {Geist, Geist_Mono} from "next/font/google";
 import ParticleWave3D from "@/components/ParticleWave3D";
-import ParticleWave from "@/components/ParticleWave";
+import dynamic from 'next/dynamic'
+// import ParticleWave from "@/components/ParticleWave";
+const ParticleWave = dynamic(() => import('@/components/ParticleWave'), {
+    ssr: false,
+})
+
 type LayoutProps = {
     children: ReactNode;
     title?: string; // optional per-page title
@@ -22,9 +27,11 @@ const geistMono = Geist_Mono({
 export default function Layout({ children, title , home }: LayoutProps) {
     const router = useRouter();
     const isHome = router.pathname === "/";
+    const isChats = router.pathname.startsWith('/chats');
     return (
         <div className="dark grid relative min-h-svh grid-rows-[auto_1fr]">
             {/*<ParticleWave3D />*/}
+            {!isChats &&  <ParticleWave3D />}
             {/*<ParticleWave />*/}
             <Header title={'X2X Creative -' + title} />
             <main className="flex-row w-full mx-auto">

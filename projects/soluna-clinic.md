@@ -1,10 +1,10 @@
 ---
-id: portfolio-dashboard
-title: "Portfolio Dashboard"
-subtitle: "Analytics & Performance Tracking"
-date: "2024-01-01"
-year: "2024"
-category: "frontend"
+id: soluna-clinic
+title: "Soluna Dermal & Aesthetic Clinic"
+subtitle: "Beauty and Cosmetic Clinic"
+date: "2025-07-01"
+year: "2025"
+category: "WordPress"
 description: "Interactive dashboard for tracking portfolio performance with beautiful data visualizations."
 longDescription: "Designed and developed a sophisticated analytics dashboard that provides real-time insights into portfolio performance. Features include customizable widgets, interactive charts, and automated reporting capabilities."
 technologies:
@@ -13,8 +13,9 @@ technologies:
   - Recharts
   - Tailwind CSS
   - Framer Motion
-image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop"
-liveUrl: "https://example.com"
+image: "/images/projects/solunaclinic.png"
+githubUrl: "#"
+liveUrl: "https://www.solunaclinic.com.au/"
 features:
   - Real-time data updates
   - Interactive chart visualizations

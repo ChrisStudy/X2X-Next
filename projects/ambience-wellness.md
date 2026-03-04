@@ -1,10 +1,10 @@
 ---
-id: fitness-mobile-app
-title: "Fitness Tracker App"
+id: ambience-wellness
+title: "Ambience Wellness"
 subtitle: "Health & Wellness Mobile App"
 date: "2023-01-01"
 year: "2023"
-category: "mobile"
+category: "WordPress"
 description: "Cross-platform mobile app for tracking workouts, nutrition, and health metrics."
 longDescription: "A comprehensive fitness tracking application that helps users monitor their workouts, track nutrition, and visualize their health progress over time. Integrates with popular fitness devices and provides personalized recommendations."
 technologies:
@@ -13,8 +13,9 @@ technologies:
   - Redux
   - Firebase
   - HealthKit
-image: "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800&h=600&fit=crop"
-githubUrl: "https://github.com"
+image: "/images/projects/ambiencewellness.png"
+githubUrl: "#"
+liveUrl: "https://ambiencewellness.com/"
 features:
   - Workout tracking with video guides
   - Nutrition logging with barcode scanner

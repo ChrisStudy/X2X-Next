@@ -1,10 +1,10 @@
 ---
-id: brand-identity
-title: "Brand Identity System"
+id: lus-massage
+title: "Lu's Massage"
 subtitle: "Complete Visual Design Package"
-date: "2023-01-01"
-year: "2023"
-category: "design"
+date: "2021-01-01"
+year: "2021"
+category: "WordPress"
 description: "Comprehensive brand identity design including logo, color system, and design guidelines."
 longDescription: "Created a complete brand identity system for a tech startup, including logo design, color palette, typography guidelines, and comprehensive brand usage documentation. The design system ensures consistent branding across all touchpoints."
 technologies:
@@ -12,7 +12,9 @@ technologies:
   - Adobe Illustrator
   - Photoshop
   - After Effects
-image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=600&fit=crop"
+image: "/images/projects/lusmassage.png"
+githubUrl: "#"
+liveUrl: "https://www.lusmassage.com.au/"
 features:
   - Logo design with variations
   - Color palette and typography
