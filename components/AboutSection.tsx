@@ -6,38 +6,38 @@ const AboutSection = () => {
 
     return (
         <>
-            <section className="about min-h-screen flex items-center justify-center px-6 relative overflow-hidden">
+            <section className="about h-full flex items-center justify-center px-6 relative overflow-hidden">
                 {/* Particle effect at bottom */}
-                <div className="absolute inset-x-0 bottom-0 h-40 pointer-events-none">
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 h-32 opacity-30">
-                        <svg className="w-full h-full" viewBox="0 0 1920 200" preserveAspectRatio="none">
-                            <defs>
-                                <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.1" />
-                                    <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
-                                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.1" />
-                                </linearGradient>
-                            </defs>
-                            <path
-                                d="M0,100 Q480,50 960,100 T1920,100 V200 H0 Z"
-                                fill="url(#waveGradient)"
-                            />
-                        </svg>
-                    </div>
-                    {/* Dot particles */}
-                    {Array.from({ length: 50 }).map((_, i) => (
-                        <div
-                            key={i}
-                            className="absolute w-1 h-1 rounded-full bg-primary/40"
-                            style={{
-                                left: `${Math.random() * 100}%`,
-                                bottom: `${Math.random() * 100}px`,
-                                opacity: Math.random() * 0.5 + 0.2,
-                            }}
-                        />
-                    ))}
-                </div>
+                {/*<div className="absolute inset-x-0 bottom-0 h-40 pointer-events-none">*/}
+                {/*    <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent" />*/}
+                {/*    <div className="absolute bottom-0 left-0 right-0 h-32 opacity-30">*/}
+                {/*        <svg className="w-full h-full" viewBox="0 0 1920 200" preserveAspectRatio="none">*/}
+                {/*            <defs>*/}
+                {/*                <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">*/}
+                {/*                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.1" />*/}
+                {/*                    <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />*/}
+                {/*                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.1" />*/}
+                {/*                </linearGradient>*/}
+                {/*            </defs>*/}
+                {/*            <path*/}
+                {/*                d="M0,100 Q480,50 960,100 T1920,100 V200 H0 Z"*/}
+                {/*                fill="url(#waveGradient)"*/}
+                {/*            />*/}
+                {/*        </svg>*/}
+                {/*    </div>*/}
+                {/*    /!* Dot particles *!/*/}
+                {/*    {Array.from({ length: 50 }).map((_, i) => (*/}
+                {/*        <div*/}
+                {/*            key={i}*/}
+                {/*            className="absolute w-1 h-1 rounded-full bg-primary/40"*/}
+                {/*            style={{*/}
+                {/*                left: `${Math.random() * 100}%`,*/}
+                {/*                bottom: `${Math.random() * 100}px`,*/}
+                {/*                opacity: Math.random() * 0.5 + 0.2,*/}
+                {/*            }}*/}
+                {/*        />*/}
+                {/*    ))}*/}
+                {/*</div>*/}
 
                 <div className="container max-w-6xl mx-auto">
                     <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
