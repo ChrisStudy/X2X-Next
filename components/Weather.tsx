@@ -76,7 +76,7 @@ export default function Weather({ current, today, daily }: WeatherProps) {
 
             <h3 className="text-lg font-semibold mb-3">Next 7 Days</h3>
 
-            <div className="mt-2 flex gap-2 overflow-x-auto pb-1 sm:flex grid">
+            <div className="mt-2 flex gap-2 flex-wrap pb-1 sm:flex grid">
                 {daily.map((day) => {
                     const d = new Date(day.date);
                     const weekday = d.toLocaleDateString("en-AU", { weekday: "short" }); // Mon
