@@ -35,7 +35,7 @@ export default function ContactForm() {
 
     return (
         <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-8">
-            <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-bold mb-6 gradient-text bg-clip-text text-transparent">
                 Send a Message
             </h2>
 

@@ -50,7 +50,7 @@ const Contact = ({ weather }: Props) => {
                 <div className="text-center mb-16">
                     <h1 className="text-5xl md:text-7xl font-bold mb-6">
                         Get In{" "}
-                        <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-purple-600 bg-clip-text text-transparent">
+                        <span className="gradient-text bg-clip-text text-transparent">
                             Touch
                         </span>
                     </h1>
