@@ -24,6 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const client = await clientPromise;
         const db = client.db("X2XCreativeChat");
         const {chatId, role, content } = req.body;
+        // @ts-ignore - MongoDB $push type inference issue
         const chat = await db.collection("chats").findOneAndUpdate({
             _id: new ObjectId(chatId),
             userId: user.sub

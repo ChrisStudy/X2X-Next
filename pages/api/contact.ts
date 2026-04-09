@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Send email
         await resend.emails.send({
-            from: 'Contact Form <x2xcreative@gmail.com>', // Resend's test domain
+            from: 'Contact Form <no-reply@x2xcreative.com.au>', // Resend's test domain
             to: 'x2xcreative@gmail.com', // Your email
             subject: `New contact from ${name}`,
             html: `
