@@ -1,5 +1,6 @@
 // /pages/chats/[[...chatId]].tsx
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import {Bot} from "lucide-react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { getUserRoles } from "@/lib/auth/roles";
 import ButtonLink from "@/components/ButtonLink";
@@ -39,7 +40,10 @@ type ChatMessage = {
 // 3️⃣ 定义 Chat 页面
 const Chat: PageWithTitle<PageProps> = ({ roles, chatId, title, messages =[] }) => {
     // console.log("props: ", title, messages);
-    const { user } = useUser();
+
+    const { user, isLoading } = useUser();
+
+
     roles = getUserRoles(user);
 
     const [newChatId, setNewChatId] = useState<string | null>(null);
@@ -172,8 +176,30 @@ const Chat: PageWithTitle<PageProps> = ({ roles, chatId, title, messages =[] }) 
                     }
             }
         >
-            {!isMember ? (
-                // ❌ 非 Member
+
+            {(!isLoading && !user) ? (
+                // 1. 未登录
+                <div className="flex flex-col items-center justify-center m-auto flex items-center justify-center ">
+                    <div className="chat-welcome flex flex-col items-center h-full justify-center">
+                        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br gradient-bg flex items-center justify-center mb-6">
+                            <Bot className="h-10 w-10 text-white" />
+                        </div>
+                        <h2 className="text-2xl text-center text-white mb-4">
+                            Hello, I'm X2X Assistant, Please login or register so I can start helping you.
+                        </h2>
+
+                            <ButtonLink
+                                href={`/auth/login`}
+                                icon={faSignOut}
+                                width="full"
+                                radius="rounded"
+                            >
+                                Login/Register
+                            </ButtonLink>
+                    </div>
+                </div>
+            ) : !isMember ? (
+                // 2. 已登录但不是 Member
                 <div className="flex flex-col items-center justify-center m-auto">
                     <h2 className="text-center font-bold">
                         Your account has limited access.
@@ -194,13 +220,12 @@ const Chat: PageWithTitle<PageProps> = ({ roles, chatId, title, messages =[] }) 
                     </div>
                 </div>
             ) : (
-                // ✅ Member 才能看到的内容
+                // 3. 已登录 + 是 Member
                 <>
-                    <ChatSidebar chatId={chatId}/>
+                    <ChatSidebar chatId={chatId} />
 
                     <div className="chat--mian-window flex-1 flex flex-col justify-between overflow-hidden min-w-0">
                         <div className="chat-message-window relative overflow-y-scroll flex-1 max-h-[75vh]">
-                            {/* 修复：用 length 判断，避免第一条 user 消息闪消失 */}
                             {allMessages.length > 0 || incomingMessage ? (
                                 <div className="chat-messages">
                                     {allMessages.map((message) => (
@@ -216,12 +241,12 @@ const Chat: PageWithTitle<PageProps> = ({ roles, chatId, title, messages =[] }) 
                         <div className="border-t border-border p-4 h-[115px]">
                             <form onSubmit={handleSubmit}>
                                 <fieldset className="flex gap-2 items-end" disabled={generatingResponse}>
-                                    <textarea
-                                        value={messageText}
-                                        onChange={(e) => setMessageText(e.target.value)}
-                                        placeholder="Send a message..."
-                                        className="w-full resize-none hover-gradient rounded-md secondary-bg-color p-2 text-white"
-                                    />
+                        <textarea
+                            value={messageText}
+                            onChange={(e) => setMessageText(e.target.value)}
+                            placeholder="Send a message..."
+                            className="w-full resize-none hover-gradient rounded-md secondary-bg-color p-2 text-white"
+                        />
                                     <button
                                         className="btn-bg-primary button gradient px-3 py-2 h-fit rounded-[8px]"
                                         type="submit"
@@ -277,7 +302,4 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) =>{
 
 Chat.pageTitle = "X2X Assistant";
 
-const ProtectedChat = withPageAuthRequired(Chat) as PageWithTitle<PageProps>;
-ProtectedChat.pageTitle = Chat.pageTitle;
-
-export default ProtectedChat;
+export default Chat;
