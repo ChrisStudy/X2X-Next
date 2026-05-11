@@ -68,7 +68,7 @@ const AboutSection = () => {
                             <div className="w-16 h-px bg-border mb-8 mx-auto lg:mx-0" />
 
                             <p className="text-muted-foreground text-lg leading-relaxed max-w-xl mb-10">
-                                My name is <span className="text-foreground font-medium gradient-text">Chris Xiong</span>. I am a web developer with over 6 years of professional experience. I focus on building modern, reliable websites and applications using current web technologies.
+                                My name is <span className="text-foreground font-medium gradient-text">Chris Xiong</span>. I am a web developer with over 8 years of professional experience. I focus on building modern, reliable websites and applications using current web technologies.
                             </p>
 
                             <button
