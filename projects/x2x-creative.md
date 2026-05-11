@@ -22,10 +22,27 @@ image: "/images/projects/x2x-creative.png"
 githubUrl: "https://github.com/ChrisStudy/X2X-Next"
 liveUrl: "#"
 features:
-  - Markdown-driven project content
-  - Static generation with ISR revalidation
-  - Real-time weather data integration
-  - Reusable layout and UI components
-  - Responsive design with Tailwind & Flowbite
+  - title: Markdown-driven project content
+    content: Projects are managed through Markdown files with frontmatter, making it easy to add, edit, and maintain project content without touching React components.
+
+  - title: Static generation with ISR revalidation
+    content: The site uses Next.js static generation and incremental static regeneration to keep pages fast while still allowing selected content to be refreshed after deployment.
+
+  - title: Real-time weather data integration
+    content: A dynamic weather widget fetches external API data and displays current weather information inside the portfolio experience.
+
+  - title: Reusable layout and UI components
+    content: The interface is built from reusable components, improving consistency and making the project easier to scale.
+
+  - title: Enterprise-Grade Security
+    content: |
+    
+        Auth0 Integration - Secure authentication and Single Sign-On (SSO) via @auth0/nextjs-auth0. 
+      
+     Role-Based Access Control (RBAC)- Custom middleware and hook-based role validation (e.g., "Member" role requirement for full AI features).
+      
+     Protected API Routes - Secure backend communication with session-based validation.
+  - title: Responsive design with Tailwind & Flowbite
+    content: The layout is optimized across desktop, tablet, and mobile using Tailwind CSS utility classes and Flowbite UI patterns.
 ---
 

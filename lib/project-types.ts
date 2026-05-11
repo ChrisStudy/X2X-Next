@@ -1,23 +1,21 @@
-// export type ProjectCategory =
-//     | "all"
-//     | "frontend"
-//     | "fullstack"
-//     | "mobile"
-//     | "design";
-
 export type ProjectCategory = string;
+
+export interface ProjectFeature {
+    title: string;
+    content: string;
+}
 
 export interface Project {
     id: string;
     title: string;
-    subtitle?: string;
+    subtitle: string | null;
     description: string;
-    longDescription: string;
+    longDescription: string | null;
     category: ProjectCategory;
     technologies: string[];
     image: string;
-    liveUrl?: string;
-    githubUrl?: string;
-    features: string[];
     year: string;
+    features: ProjectFeature[];
+    liveUrl: string | null;
+    githubUrl: string | null;
 }

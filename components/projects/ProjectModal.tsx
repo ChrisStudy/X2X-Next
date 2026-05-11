@@ -1,6 +1,7 @@
 "use client";
 
-import { X, ExternalLink, Github, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { X, ExternalLink, Github, ChevronDown } from "lucide-react";
 import { Project } from "@/lib/project-types";
 import { Dialog, DialogContent, DialogTitle } from "../ui/Dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -12,6 +13,8 @@ interface ProjectModalProps {
 }
 
 const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
+    const [openFeatureIndex, setOpenFeatureIndex] = useState<number | null>(0);
+
     if (!project) return null;
 
     return (
@@ -49,7 +52,7 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
           Mobile: whole modal scrolls together
           Desktop: modal stays fixed, right content scrolls
         */}
-                <div className="h-full overflow-y-auto md:overflow-hidden">
+                <div className="project-modal-scroll h-full overflow-y-auto md:overflow-hidden">
                     <div className="flex min-h-full flex-col md:h-full md:min-h-0 md:flex-row">
                         {/* Mobile top / Desktop left */}
                         <aside
@@ -131,9 +134,10 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
                             className="
                 flex-1 p-4
                 sm:p-6
-                md:min-h-0 md:overflow-y-auto md:p-8 md:no-scrollbar md:scroll-fade-right
+                md:min-h-0 md:overflow-y-auto md:p-8 md:project-modal-scroll md:scroll-fade-right
               "
                         >
+                            {/* About section */}
                             <section className="mb-7 md:mb-8">
                                 <h4 className="mb-3 text-xl font-bold md:mb-4 md:text-2xl">
                                     About <span className="gradient-text">Project</span>
@@ -144,6 +148,7 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
                                 </p>
                             </section>
 
+                            {/* Technologies section */}
                             <section className="mb-7 md:mb-8">
                                 <h4 className="mb-3 text-xl font-bold md:mb-4 md:text-2xl">
                                     Tech <span className="gradient-text">Stack</span>
@@ -158,22 +163,58 @@ const ProjectModal = ({ project, isOpen, onClose }: ProjectModalProps) => {
                                 </div>
                             </section>
 
+                            {/* Features accordion */}
                             <section>
                                 <h4 className="mb-3 text-xl font-bold md:mb-4 md:text-2xl">
                                     Key <span className="gradient-text">Features</span>
                                 </h4>
 
-                                <ul className="space-y-3">
-                                    {project.features.map((feature, index) => (
-                                        <li
-                                            key={index}
-                                            className="flex items-start gap-2.5 text-sm text-muted-foreground md:gap-3 md:text-base"
-                                        >
-                                            <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-primary md:h-5 md:w-5" />
-                                            <span>{feature}</span>
-                                        </li>
-                                    ))}
-                                </ul>
+                                <div className="space-y-3">
+                                    {project.features.map((feature, index) => {
+                                        const isOpen = openFeatureIndex === index;
+
+                                        return (
+                                            <div
+                                                key={`${feature.title}-${index}`}
+                                                className="
+                          overflow-hidden rounded-xl  border-border/60
+                          bg-background/40 transition-all
+                          hover:border-primary/50
+                        "
+                                            >
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        setOpenFeatureIndex(isOpen ? null : index)
+                                                    }
+                                                    className="
+                            flex w-full items-center justify-between gap-4
+                            px-4 py-3 text-left
+                          "
+                                                >
+                          <span className="text-sm font-medium text-foreground md:text-base">
+                            {feature.title}
+                          </span>
+
+                                                    <ChevronDown
+                                                        className={`
+                              h-4 w-4 shrink-0 text-primary transition-transform duration-200
+                              ${isOpen ? "rotate-180" : ""}
+                            `}
+                                                    />
+                                                </button>
+
+                                                {isOpen && feature.content && (
+                                                    <div className="border-border/50 px-4 pb-4 pt-3">
+                                                        <p className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground md:text-base">
+                                                            {feature.content}
+                                                        </p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </section>
                         </main>
                     </div>
