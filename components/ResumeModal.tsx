@@ -77,7 +77,7 @@ const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                         style={{ border: '4px solid rgba(255,255,255,0.15)' }}
                     >
                         <Image
-                            src="/images/about/profile-photo.JPG"
+                            src="/images/about/profile-photo.jpg"
                             alt="Chris Xiong"
                             width={128}
                             height={128}
