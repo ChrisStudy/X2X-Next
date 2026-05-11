@@ -35,9 +35,7 @@ features:
     content: The interface is built from reusable components, improving consistency and making the project easier to scale.
 
   - title: Enterprise-Grade Security
-    content: |
-    
-        Auth0 Integration - Secure authentication and Single Sign-On (SSO) via @auth0/nextjs-auth0. 
+    content: Auth0 Integration - Secure authentication and Single Sign-On (SSO) via @auth0/nextjs-auth0. 
       
      Role-Based Access Control (RBAC)- Custom middleware and hook-based role validation (e.g., "Member" role requirement for full AI features).
       
