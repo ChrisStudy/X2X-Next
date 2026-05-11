@@ -45,7 +45,7 @@ const AboutSection = () => {
                         <div className="relative flex-shrink-0 animate-fade-in">
                             <div className="w-72 h-80 lg:w-80 lg:h-96 rounded-2xl overflow-hidden border border-border/50 shadow-2xl shadow-primary/10">
                                 <img
-                                    src='images/profile-photo.jpg'
+                                    src='/images/profile-photo.jpg'
                                     alt="Chris Xiong"
                                     className="w-full h-full object-cover object-center"
                                 />
