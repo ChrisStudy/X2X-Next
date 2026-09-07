@@ -60,7 +60,7 @@ export default function Header({ title }: HeaderProps) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <title>{title ?? 'X2X Creative - Best'}</title>
                 <meta name="description" content="My awesome site" />
-                <meta name="robots" content="noindex, nofollow" />
+                <meta name="robots" content="index, follow" />
             </Head>
 
             <header className={`${layoutStyles.header} main-header w-full mx-auto px-10`}>
