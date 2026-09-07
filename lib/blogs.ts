@@ -58,6 +58,6 @@ export async function getPostData(id: string): Promise<PostData> {
     return {
         id,
         ...(matterResult.data as { title: string; date: string }),
-        contentHtml,  // ★ ★ ★ 必须确保是 string，而不是 Promise
+        contentHtml,
     };
 }

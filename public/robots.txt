@@ -1,2 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /chats
+Disallow: /api/
+
+Sitemap: https://www.x2xcreative.com.au/sitemap.xml

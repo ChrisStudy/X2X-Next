@@ -2,17 +2,12 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import Head from 'next/head';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import layoutStyles from '../components/layout.module.css';
 
-interface HeaderProps {
-    title?: string;
-}
-
-export default function Header({ title }: HeaderProps) {
+export default function Header() {
     const pathname = usePathname();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -56,13 +51,6 @@ export default function Header({ title }: HeaderProps) {
 
     return (
         <>
-            <Head>
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <title>{title ?? 'X2X Creative - Best'}</title>
-                <meta name="description" content="My awesome site" />
-                <meta name="robots" content="index, follow" />
-            </Head>
-
             <header className={`${layoutStyles.header} main-header w-full mx-auto px-10`}>
                 <nav className="w-full z-20">
                     <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">

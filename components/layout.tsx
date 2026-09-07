@@ -1,6 +1,8 @@
 import Header from "./header";
+import SEO from "./SEO";
 import { ReactNode } from "react";
 import { useRouter } from "next/router";
+import type { SEOConfig } from "@/lib/seo";
 import styles from '../components/layout.module.css';
 import Link from 'next/link';
 import {Geist, Geist_Mono} from "next/font/google";
@@ -16,8 +18,9 @@ const ParticleWave = dynamic(() => import('@/components/ParticleWave'), {
 
 type LayoutProps = {
     children: ReactNode;
-    title?: string; // optional per-page title
-    home?: boolean; // ✅ mark it optiona
+    title?: string;
+    seo?: SEOConfig;
+    home?: boolean;
 };
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -27,16 +30,25 @@ const geistMono = Geist_Mono({
     variable: "--font-geist-mono",
     subsets: ["latin"],
 });
-export default function Layout({ children, title , home }: LayoutProps) {
+export default function Layout({ children, title, seo, home }: LayoutProps) {
     const router = useRouter();
     const isHome = router.pathname === "/";
     const isChats = router.pathname.startsWith('/chats');
     return (
         <div className="dark grid relative min-h-svh grid-rows-[auto_1fr]">
-            {/*<ParticleWave3D />*/}
+            <SEO
+                title={seo?.title ?? title}
+                description={seo?.description}
+                keywords={seo?.keywords}
+                image={seo?.image}
+                path={seo?.path ?? router.asPath.split("?")[0].split("#")[0]}
+                noIndex={seo?.noIndex}
+                type={seo?.type}
+                publishedTime={seo?.publishedTime}
+                modifiedTime={seo?.modifiedTime}
+            />
             {!isChats &&  <ParticleWave3D />}
-            {/*<ParticleWave />*/}
-            <Header title={'X2X Creative -' + title} />
+            <Header />
             <main className="flex-row w-full mx-auto">
                 {children}
                         {/*{!isHome && (*/}

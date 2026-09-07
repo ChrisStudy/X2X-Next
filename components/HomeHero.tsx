@@ -73,7 +73,7 @@ export default function HomeHero() {
 
                 <div className="cta-group flex justify-center gap-6">
                     <ButtonLink href="/about">About Me</ButtonLink>
-                    <ButtonLink href="/projects" variant="secondary">
+                    <ButtonLink href="/myproject" variant="secondary">
                         My Projects
                     </ButtonLink>
                 </div>
