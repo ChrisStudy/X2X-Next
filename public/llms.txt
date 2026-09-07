@@ -3,6 +3,6 @@
 
 ## Main pages
 - Home: https://www.x2xcreative.com.au/
-- About: hhttps://www.x2xcreative.com.au/about
+- About: https://www.x2xcreative.com.au/about
 - Projects: https://www.x2xcreative.com.au/myproject
-- Contact: hhttps://www.x2xcreative.com.au/contact
+- Contact: https://www.x2xcreative.com.au/contact
