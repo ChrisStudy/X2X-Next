@@ -6,15 +6,15 @@ import type { SEOConfig } from "@/lib/seo";
 import styles from '../components/layout.module.css';
 import Link from 'next/link';
 import {Geist, Geist_Mono} from "next/font/google";
-import ParticleWave3D from "@/components/ParticleWave3D";
+// import ParticleWave3D from "@/components/ParticleWave3D";
 import dynamic from 'next/dynamic'
-// import ParticleWave from "@/components/ParticleWave";
-// const ParticleWave3D = dynamic(() => import('@/components/ParticleWave3D'), {
-//     ssr: false,
-// })
-const ParticleWave = dynamic(() => import('@/components/ParticleWave'), {
+import ParticleWave from "@/components/ParticleWave";
+const ParticleWave3D = dynamic(() => import('@/components/ParticleWave3D'), {
     ssr: false,
 })
+// const ParticleWave = dynamic(() => import('@/components/ParticleWave'), {
+//     ssr: false,
+// })
 
 type LayoutProps = {
     children: ReactNode;
