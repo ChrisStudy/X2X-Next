@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
         ignoreBuildErrors: true,
     },
     images: {
+        domains: ['cdn.sanity.io'],
         remotePatterns: [
             {
                 protocol: 'https',

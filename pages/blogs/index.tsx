@@ -1,14 +1,15 @@
 import { GetStaticProps } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { getSortedPostsData, PostData } from "../../lib/blogs";
+import { getSortedPostsData, PostData } from "../../lib/sanity";
 import Date from '../../components/date';
 import SEO from '../../components/SEO';
 
 type Props = { allPostsData: PostData[] };
 
 export const getStaticProps: GetStaticProps<Props> = async () => ({
-    props: { allPostsData: getSortedPostsData() },
+    props: { allPostsData: await getSortedPostsData() },
+    revalidate: 60,
 });
 
 export default function BlogList({ allPostsData }: Props) {
